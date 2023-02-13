@@ -1,0 +1,15 @@
+#root{
+    position: relative;
+    min-height: 100%;
+    min-width: 100%;
+    cursor:grab;
+}
+
+#chartDiv {
+    position: absolute;
+}
+
+#bgCanvas {
+    position: absolute;
+    
+}

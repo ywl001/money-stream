@@ -1,0 +1,45 @@
+.show {
+    display: flex;
+    height: 150px;
+    width: 100%;
+    background-color: antiquewhite;
+
+    .photo {
+        height: 100%;
+        background-color: aqua;
+    }
+
+    .personInfo {
+        height: 100%;
+        padding: 0px 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+
+        img {
+            border-color: #04AA6D;
+            margin-right: 5px;
+            cursor: pointer;
+            border-radius: 50%;
+
+            border: 1px solid #978a65;
+
+            &:hover {
+                border-radius: 5px;
+                box-shadow: 0 0 10px red;
+            }
+        }
+    }
+
+    .btnContainer {
+        height: 100%;
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        margin-right: 5px;
+    }
+
+    .mt-5 {
+        margin-bottom: 5px;
+    }
+}

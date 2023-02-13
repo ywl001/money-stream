@@ -1,0 +1,11 @@
+
+.btnContainer {
+    display: flex;
+    justify-content: center;
+    //   background-color:red;
+    margin-top: 20px;
+
+    >* {
+        margin-right: 50px;
+    }
+}

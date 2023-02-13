@@ -1,0 +1,10 @@
+<div class="container">
+  <div class="picker-container">
+    <div class="up" (click)="onIncrease()"></div>
+    <div class="time">{{value}}</div>
+    <div class="down" (click)="onDecrease()"></div>
+  </div>
+  <div class="unit" *ngIf="unit && unit!=''">
+    {{unit}}
+  </div>
+</div>

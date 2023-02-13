@@ -1,0 +1,13 @@
+<h1 matDialogTitle>添加节点备注</h1>
+
+<mat-dialog-content>
+  <mat-form-field style="width: 800px">
+    <mat-label>备注</mat-label>
+    <textarea cdkTextareaAutosize matInput [(ngModel)]='value' [placeholder]="placeholder"></textarea>
+  </mat-form-field>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button mat-button matDialogClose>取消</button>
+  <button mat-button (click) = onSubmit() matDialogClose>确定</button>
+</mat-dialog-actions>

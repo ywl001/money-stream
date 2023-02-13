@@ -1,0 +1,26 @@
+<div class="root">
+  <p>通过选择交易金额或者交易时间来确定是哪笔交易,然后填写具体的第三方账号</p>
+  <mat-form-field>
+    <mat-label>对应的第三方账号：</mat-label>
+    <input [(ngModel)]="account" matInput autocomplete="off" [placeholder]="placeholder" [disabled] = "isDisabled" >
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>选择交易金额</mat-label>
+    <mat-select [formControl] = "moneyControl" placeholder="请选择具体的交易金额">
+      <mat-option *ngFor="let money of moneys" [value]=money>{{money}}</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>选择交易时间</mat-label>
+    <mat-select [formControl] = "timeControl" placeholder="请选择具体的交易时间">
+      <mat-option *ngFor="let time of tradeTimes" [value]=time>{{time}}</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <div class='btnContainer'>
+    <button mat-raised-button color='accent' mat-dialog-close>取消</button>
+    <button mat-raised-button color='primary' mat-dialog-close (click)=onSubmit()>确定</button>
+  </div>
+</div>

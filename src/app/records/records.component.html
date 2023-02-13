@@ -1,0 +1,54 @@
+<div class="root">
+  <div class="caseList">
+    <mat-accordion displayMode="flat">
+      <mat-expansion-panel *ngFor="let lawCase of caseList$ | async" (click)="onClickPanel(lawCase)">
+        <mat-expansion-panel-header [class.isUserCase]="getIsSelfCase(lawCase)" [class.isSelectedCase] = "getIsSelectedCase(lawCase)">
+          <mat-panel-title>
+            {{ lawCase.caseName }}
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="btnContainer">
+          <button  *ngIf="user" mat-button (click)="onAddAccount(lawCase); $event.stopPropagation()">
+            添加账号
+          </button>
+
+          <button  *ngIf="user" mat-button (click)="onAddFile(); $event.stopPropagation()">
+            上传数据
+          </button>
+
+          <input #inputFile multiple ng2FileSelect type="file" style="display: none" [uploader]="uploader"
+            (click)="$event.stopPropagation()" (onFileSelected)="onFileSelected($event)" />
+
+          <button mat-button (click)="onCreateReport(lawCase); $event.stopPropagation()">
+            研判报告
+          </button>
+
+          <button *ngIf="user" mat-button (click)="onEditCase(lawCase); $event.stopPropagation()">
+            修改案件
+          </button>
+        </div>
+
+        <div class="itemContainer" [class.selected]="item == currentItem" *ngFor="let item of accountList"
+          (click)="onItemClick(item); $event.stopPropagation()">
+          <div class="account">{{ item.accountName }}:{{ item.account }}</div>
+
+          <div class='item-btn-container' *ngIf="item.userID == user?.id">
+            <div class="btn btnEdit" (click)="onEditStartAccount(item); $event.stopPropagation()"></div>
+            <div class="btn btnDel" (click)="onDelete(item); $event.stopPropagation()"></div>
+          </div>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </div>
+
+  <div class="filter">
+    <mat-form-field class="flex2">
+      <mat-label>过滤</mat-label>
+      <input matInput [formControl]="caseFilterControl" autocomplete="off" />
+      <mat-icon *ngIf="user" style="margin-right: 5px; cursor: pointer;" [svgIcon]="userIcon" matSuffix
+        matTooltip="你的案件" (click)="onShowUserCase()"></mat-icon>
+      <mat-icon style="margin-right: 10px; cursor: pointer" svgIcon="saveIcon" matSuffix matTooltip="保存"
+        (click)="saveFilterValue()"></mat-icon>
+    </mat-form-field>
+  </div>
+</div>

@@ -1,0 +1,78 @@
+$size:30px;
+$bgColor:rgb(230, 230, 230);
+
+.container {
+  display: flex;
+  align-items: center;
+
+  .picker-container {
+    display: flex;
+    flex-direction: column;
+
+    >* {
+      width: $size;
+      height: $size;
+      cursor: pointer;
+      border: 1px solid rgb(161, 161, 161)
+    }
+
+    &:hover {
+
+      .up,
+      .down {
+        animation: show-animation 0.5s;
+        opacity: 1;
+        background-color: $bgColor;
+      }
+    }
+
+    .up {
+      background-image: url("../../../assets/up.svg");
+      background-size: cover;
+      opacity: 0;
+      animation: hide-animation 0.5s
+    }
+
+    .down {
+      background-image: url("../../../assets/down.svg");
+      background-size: cover;
+      opacity: 0;
+      animation: hide-animation 0.5s;
+    }
+
+    @keyframes show-animation {
+      from {
+        opacity: 0;
+        background-color: white;
+      }
+
+      to {
+        opacity: 1;
+        background-color: $bgColor;
+      }
+    }
+
+    @keyframes hide-animation {
+      from {
+        opacity: 1;
+        background-color: $bgColor;
+      }
+
+      to {
+        opacity: 0;
+        background-color: #fff;
+      }
+    }
+
+    .time {
+      text-align: center;
+      align-items: center;
+      line-height: $size;
+    }
+  }
+
+  .unit {
+    padding: 0 5px;
+  }
+
+}

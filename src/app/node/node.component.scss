@@ -1,0 +1,208 @@
+#root {
+  width: fit-content;
+  position: absolute;
+  // background-color: #feeeda !important;
+  // background-color: #e4e4e4 !important;
+  // background-color: #b9e9f1 !important;
+  background-color: #d5f3f4 !important;
+  // color: #646ada;
+  // color: #2b5e79;
+  // color: white;
+  cursor: pointer;
+  font-size: 16px;
+  border: 1px solid #999999;
+  background: no-repeat center top;
+  background-size: 100%;
+  display: flex;
+
+  .img-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: aliceblue;
+    font-size: 10px;
+
+    .label{
+      position: absolute;
+      bottom: 20px;
+      align-items: center;
+      width: 60px;
+      height: 25px;
+      
+      background-size: 100% 100%;
+    }
+
+    .daji{
+      background-image: url("../../assets/daji.jpg");
+    }
+    .luodi{
+      background-image: url("../../assets/luodi.jpg");
+    }
+  }
+
+  .text-container {
+    display: flex;
+    flex-flow: wrap column;
+    p {
+      max-width: 280px;
+      min-width: 240px;
+      line-height: 18px;
+      margin: 5px;
+      padding: 1px 5px;
+      word-break: break-all;
+    }
+    .image-container{
+      display: flex;
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      img{
+        height: 25px;
+        width: 25px;
+        margin-right: 3px;
+        margin-bottom: 3px;
+      }
+    }
+  }
+
+  .btn-container {
+   
+    position: absolute;
+    top: -25px;
+    right: 0px;
+    opacity: 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    width: auto;
+    background-color: lightyellow;
+
+    &:hover {
+      opacity: 1;
+    }
+
+    > * {
+      margin-right: 5px;
+    }
+
+    .btn_container2 {
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-end;
+    }
+
+    .btn {
+      width: 24px;
+      height: 24px;
+      background-size: 100% auto;
+      cursor: pointer;
+
+      margin-left: 2px;
+
+      &:hover {
+        opacity: 1;
+      }
+    }
+
+    .btnDel {
+      background-image: url("../../assets/delete.png");
+
+      &:hover {
+        background-image: url("../../assets/delete_over.png");
+      }
+    }
+
+    .btnFilter {
+      background-image: url("../../assets/filter.png");
+
+      &:hover {
+        background-image: url("../../assets/filter_over.png");
+      }
+    }
+
+    .btnEdit {
+      background-image: url("../../assets/edit2.png");
+
+      &:hover {
+        background-image: url("../../assets/edit2_over.png");
+      }
+    }
+
+    .btnDownload {
+      background-image: url("../../assets/download.png");
+
+      &:hover {
+        background-image: url("../../assets/download_over.png");
+      }
+    }
+
+    .btnAttachment {
+      background-image: url("../../assets/attachment.png");
+
+      &:hover {
+        background-image: url("../../assets/attachment_over.png");
+      }
+    }
+
+    .btnConnect {
+      background-image: url("../../assets/connect.png");
+
+      &:hover {
+        background-image: url("../../assets/connect_over.png");
+      }
+    }
+
+    .btnDuration {
+      background-image: url("../../assets/duration.png");
+
+      &:hover {
+        background-image: url("../../assets/duration_over.png");
+      }
+    }
+
+    .btnRemark {
+      background-image: url("../../assets/remark.png");
+
+      &:hover {
+        background-image: url("../../assets/remark_over.png");
+      }
+    }
+
+    .btnFreeze {
+      background-image: url("../../assets/snow.png");
+
+      &:hover {
+        background-image: url("../../assets/snow_over.png");
+      }
+    }
+
+    .btnPerson {
+      background-image: url("../../assets/person.png");
+
+      &:hover {
+        background-image: url("../../assets/person_over.png");
+      }
+    }
+
+    .btnAddRecord {
+      background-image: url("../../assets/add-record.png");
+
+      &:hover {
+        background-image: url("../../assets/add-record-over.png");
+      }
+    }
+
+    .person {
+      background-image: url("../../assets/person2.png");
+    }
+  }
+}
+.selected {
+  border: 3px solid red !important;
+  // transform: scale(1.1);
+}
+
+//mat tool-tip的换行
+::ng-deep .mat-tooltip{
+  white-space: pre-wrap;
+}

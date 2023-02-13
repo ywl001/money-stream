@@ -1,0 +1,8 @@
+{
+    "rootPath":"/fanzha/back/",
+    "exclePath":"/fanzha/back/excel/",
+    "photoPath":"/fanzha/back/personImage/",
+    "sqlPath":"/fanzha/back/sql.php",
+    "uploadPath":"/fanzha/back/upload.php",
+    "uploadImagePath":"/fanzha/back/uploadImage.php"
+}

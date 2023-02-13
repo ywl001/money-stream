@@ -1,0 +1,41 @@
+.edit {
+    display: flex;
+    background-color: beige;
+    min-width: 1000px;
+
+    min-height: 250px;
+
+    .photo {
+        height: 250px;
+        border: 1px solid black;
+        cursor: pointer;
+
+        // &:hover {
+        //     content: url(../../assets/photo_over.png);
+        // }
+    }
+
+    .fields {
+        height: 100%;
+        padding: 0px 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        flex: 1;
+
+        >* {
+            width: 100%
+        }
+
+        .btnContainer {
+            display: flex;
+            justify-content: center;
+            //   background-color:red;
+            margin-top: 20px;
+
+            >* {
+                margin-right: 50px;
+            }
+        }
+    }
+}

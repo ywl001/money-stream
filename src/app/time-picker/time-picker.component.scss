@@ -1,0 +1,71 @@
+$size : 30px;
+
+.root-container {
+  display: flex;
+  align-items: center;
+
+  .picker-container {
+    display: flex;
+    flex-direction: column;
+
+    >* {
+      width: $size;
+      height: $size;
+      cursor: pointer;
+      border: 1px solid black
+    }
+
+    .up {
+      background-image: url("../../assets/up.svg");
+      background-size: cover;
+    }
+
+    .down {
+      background-image: url("../../assets/down.svg");
+      background-size: cover;
+    }
+
+    @keyframes show-animation {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes hide-animation {
+        from {
+          opacity: 1;
+        }
+  
+        to {
+          opacity: 0;
+        }
+      }
+
+    .hide {
+        // animation: hide-animation 3s;
+        opacity: 0;
+    }
+
+    .show{
+        // animation: show-animation 3s;
+        opacity: 1;
+    }
+
+    .time {
+      text-align: center;
+      align-items: center;
+      line-height: $size;
+    }
+  }
+
+  .label {
+    width: $size;
+    height: $size;
+    text-align: center;
+    line-height: $size;
+  }
+}

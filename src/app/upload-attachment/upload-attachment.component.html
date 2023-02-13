@@ -1,0 +1,17 @@
+<div class="root">
+    <h1 mat-dialog-title>{{'添加附件'}}</h1>
+
+    <input type="file" multiple>
+
+
+    <mat-form-field class="line">
+        <mat-label>附件描述：</mat-label>
+        <input matInput autocomplete="off">
+    </mat-form-field>
+
+    <div class='btnContainer'>
+        <button mat-raised-button color='primary' mat-dialog-close (click)=onSubmit()>确定</button>
+        <button mat-raised-button color='accent' mat-dialog-close>取消</button>
+    </div>
+
+</div>

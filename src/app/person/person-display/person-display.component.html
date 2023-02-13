@@ -1,0 +1,35 @@
+<div class="show">
+  <img class="photo" *ngIf="photoUrl != 'assets/photo.png'" [src]="photoUrl" (error)="onImgError()" />
+  <div class="personInfo">
+    <div>
+      {{ person.name }}--<span *ngIf="person.phoneNumber">{{ person.phoneNumber }}</span>--<span
+        *ngIf="person.personNumber">{{ person.personNumber
+        }}</span>
+    </div>
+    <div>
+      <span *ngIf="person.address && !person.currentAddress">{{ person.address }}</span>
+      <span *ngIf="person.currentAddress" style="color: red;">{{person.currentAddress}}</span>
+    </div>
+    <div *ngIf="person.remark">{{ person.remark }}</div>
+    <div *ngIf="personFriends?.length > 0">
+      <img [src]="getPersonIcon(p)" width="30px" height="30px" *ngFor="let p of personFriends"
+        (click)="onClickPersonFriend(p)" [matTooltip]="friendIconTooltip(p)" (error)="onImgError2(p)">
+    </div>
+  </div>
+  <div class="btnContainer" *ngIf="isCreateUser">
+    <button class="flex1 mt-5" mat-raised-button color="primary" [disabled]="btnDisabled" (click)="onEditPeople()">
+      编辑人员
+    </button>
+    <button class="flex1" mat-raised-button color="primary" [disabled]="btnDisabled" (click)="onDelPeople()">
+      删除人员
+    </button>
+  </div>
+  <div class="btnContainer " *ngIf="isCreateUser">
+    <button class="flex1 mt-5" mat-raised-button color="accent" [disabled]="btnDisabled" (click)="onRelationAccount()">
+      添加账号
+    </button>
+    <button class="flex1" mat-raised-button color="accent" [disabled]="btnDisabled" (click)="onRelationPerson()">
+      关联人员
+    </button>
+  </div>
+</div>

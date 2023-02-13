@@ -1,0 +1,27 @@
+.root {
+  width: 500px;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+.radio-button {
+  margin-top: 10px;
+  margin-right: 30px;
+  margin-bottom: 30px;
+}
+
+.radio-group {
+  margin-bottom: 30px;
+}
+
+.btnContainer {
+  display: flex;
+  justify-content: center
+}
+
+.btnContainer>* {
+  width: 100px;
+  margin-left: 30px;
+}

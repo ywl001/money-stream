@@ -1,0 +1,32 @@
+<div class="account">
+  名下涉案银行卡：
+  <table>
+    <tr>
+      <th>账号</th>
+      <th>开户行</th>
+      <th>开户日期</th>
+      <th>账号标识</th>
+      <th>操作</th>
+    </tr>
+
+    <tr *ngFor="let item of personAccounts">
+      <td (click)="onClickEditAccount(item)">{{item.account}}</td>
+      <td (click)="onClickShowAccountRecord(item)">{{item.company}}</td>
+      <td>{{item.createDate}}</td>
+      <td>
+        <img src="assets/quxian.png" [width]="iocnSize" [height]="iocnSize" *ngIf="isHas(item,'markMoney')"
+          [matTooltip]="getQuxianTooltip(item)">
+        <img src="assets/fanxian.png" [width]="iocnSize" [height]="iocnSize" *ngIf="item.fanxian" matTooltip="有返现">
+        <img src="assets/beizhu.png" [width]="iocnSize" [height]="iocnSize" *ngIf="item.remark"
+          [matTooltip]="item.remark">
+        <img src="assets/lawcase.png" [width]="iocnSize" [height]="iocnSize" *ngIf="isHas(item,'relationCaseID')"
+          [matTooltip]="getRelationCaseTooltip(item)">
+      </td>
+      <td>
+        <button *ngIf="isCreateUser && !(isNodeAccount(item.account)|async)"
+          (click)="onDelRelationAccount(item)">删除</button>
+        <button (click)="onDownloadRaw(item)">下载</button>
+      </td>
+    </tr>
+  </table>
+</div>

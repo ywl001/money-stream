@@ -1,0 +1,8 @@
+<div class="root">
+    <ag-grid-angular #agGrid id="agGrid" class="ag-theme-alpine" [rowData]="gridData" [columnDefs]="columnDefs"
+        (gridReady)="onGridReady($event)" (rowDataChanged)="onRowDataChange()">
+    </ag-grid-angular>
+    <div class="btnContainer">
+        <button mat-button (click)="onDownloadExcel()">下载excel</button>
+    </div>
+</div>

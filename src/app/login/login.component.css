@@ -1,0 +1,11 @@
+.dialogContent{
+    display:flex;
+    flex-direction: column;
+    width: 300px;
+}
+
+.btnDiv{
+    padding: 0px 80px;
+    display:flex;
+    justify-content: space-between;
+}

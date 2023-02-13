@@ -1,0 +1,41 @@
+.account {
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      cursor: pointer;
+
+      td,
+      th {
+        border: 1px solid #ddd;
+        padding: 8px;
+      }
+
+      tr {
+        background-color: #f2f2f2;
+
+        &:nth-child(even) {
+          background-color: #ddd;
+        }
+
+        &:hover {
+          background-color: lightpink;
+        }
+      }
+
+      th {
+        padding-top: 12px;
+        padding-bottom: 12px;
+        text-align: center;
+        background-color: #04AA6D;
+        color: white;
+      }
+
+      td {
+        text-align: left;
+        img{
+          margin-top: 5px;
+          margin-right: 3px;
+        }
+      }
+    }
+  }

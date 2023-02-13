@@ -1,0 +1,27 @@
+<h1 matDialogTitle>查询账号归属案件</h1>
+
+<div>
+  <mat-form-field style="width: 500px">
+    <mat-label>账号或姓名</mat-label>
+    <textarea cdkTextareaAutosize matInput [(ngModel)]="value"></textarea>
+  </mat-form-field>
+  <!-- <div *ngIf = "results && results.length > 0">
+      <p *ngFor = "let r of results">{{r.caseName}}</p>
+  </div> -->
+
+  <mat-selection-list *ngIf="results && results.length > 0" [multiple]="false">
+    <mat-list-option
+      *ngFor="let r of results"
+      [style.color]="r.level == 1 ? 'crimson' : ''"
+      (click) = onClick(r)
+      >{{ r.caseName }}
+    </mat-list-option>
+  </mat-selection-list>
+</div>
+
+<div
+  style="display: flex; justify-content: center; border-top: 1px solid black"
+>
+  <button mat-button matDialogClose>取消</button>
+  <button mat-button (click)="onSubmit()">确定</button>
+</div>

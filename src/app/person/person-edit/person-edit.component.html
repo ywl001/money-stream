@@ -1,0 +1,88 @@
+<div class="edit">
+    <img class="photo" [src]="photoUrl" (click)="onUpload()" (error)="onImgError()" />
+    <div class="fields">
+        <div class="line">
+            <mat-form-field style="width: 220px;">
+                <mat-label>身份证号：</mat-label>
+                <input #personNumber matInput [ngModel]="person?.personNumber" (input)="onPersonNumberChange(personNumber.value)" autocomplete="off" del-whitespace/>
+            </mat-form-field>
+            <div class="line flex1">
+                <mat-form-field style="width: 100px;">
+                    <mat-label>姓名：</mat-label>
+                    <input matInput [(ngModel)]="person.name" [disabled]="formDisabled" autocomplete="off" del-whitespace />
+                </mat-form-field>
+
+                <!-- <mat-form-field style="width: 100px;">
+                    <mat-label>性别：</mat-label>
+                    <input matInput [(ngModel)]="person.gender" [disabled]="formDisabled" autocomplete="off" />
+                </mat-form-field> -->
+
+                <mat-form-field style="width: 80px;">
+                    <mat-label>民族：</mat-label>
+                    <input matInput [(ngModel)]="person.nation" [disabled]="formDisabled" autocomplete="off" del-whitespace/>
+                </mat-form-field>
+
+                <mat-form-field class="flex1">
+                    <mat-label>手机号码：</mat-label>
+                    <input matInput [(ngModel)]="person.phoneNumber" [disabled]="formDisabled" autocomplete="off" del-whitespace />
+                </mat-form-field>
+            </div>
+        </div>
+
+
+        <div class="line">
+            <mat-form-field class="flex1">
+                <mat-label>家庭住址：</mat-label>
+                <input matInput [(ngModel)]="person.address" [disabled]="formDisabled" autocomplete="off" del-whitespace/>
+            </mat-form-field>
+
+            <mat-form-field class="flex1">
+                <mat-label>现住址：</mat-label>
+                <input matInput [(ngModel)]="person.currentAddress" [disabled]="formDisabled" autocomplete="off" del-whitespace/>
+            </mat-form-field>
+
+            <mat-form-field class="flex1">
+                <mat-label>工作单位：</mat-label>
+                <input matInput [(ngModel)]="person.workplace" [disabled]="formDisabled" autocomplete="off" del-whitespace/>
+            </mat-form-field>
+        </div>
+
+        <mat-form-field class="flex1">
+            <mat-label>备注：</mat-label>
+            <textarea matInput [(ngModel)]="person.remark" cdkTextareaAutosize [disabled]="formDisabled" del-whitespace></textarea>
+        </mat-form-field>
+
+        <div class="line">
+            <mat-checkbox [disabled]="formDisabled" [(ngModel)]=isLawPerson>公司法人</mat-checkbox>
+            <mat-checkbox [disabled]="formDisabled" [(ngModel)]=isLuodi>需落地</mat-checkbox>
+            <mat-checkbox [disabled]="formDisabled" [(ngModel)]=isDaji>可打击</mat-checkbox>
+
+            <mat-form-field class="flex1" appearance="fill">
+                <mat-label>涉嫌罪名：</mat-label>
+                <input matInput [(ngModel)]="person.sue" [matAutocomplete]="auto" [disabled]="formDisabled" autocomplete="off"
+                    type="text" />
+                <mat-autocomplete #auto="matAutocomplete">
+                    <mat-option *ngFor="let option of sues$ |async" [value]="getSueValue(option)">
+                        {{ option }}
+                    </mat-option>
+                </mat-autocomplete>
+            </mat-form-field>
+
+        </div>
+
+        <mat-form-field class="flex1">
+            <mat-label>前科情况：</mat-label>
+            <textarea matInput [(ngModel)]="person.criminalRecord" cdkTextareaAutosize [disabled]="formDisabled" del-whitespace></textarea>
+        </mat-form-field>
+
+        <input #fileInput ng2FileSelect type="file" style="display: none" [uploader]="uploader"
+            (click)="$event.stopPropagation()" (onFileSelected)="onFileSelected($event)" />
+
+        <div class="btnContainer">
+            <button mat-raised-button color="accent" mat-dialog-close>取消</button>
+            <button mat-raised-button color="primary" [disabled]="btnDisabled" (click)="onSubmit()">
+                确定
+            </button>
+        </div>
+    </div>
+</div>

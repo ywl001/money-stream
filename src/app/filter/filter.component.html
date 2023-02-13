@@ -1,0 +1,44 @@
+<h1 matDialogTitle>过滤下级账户</h1>
+
+<mat-dialog-content style="width: 800px;">
+    <div style="display: flex; flex-direction: column;">
+        <mat-form-field>
+            <mat-label>交易金额小于（元）</mat-label>
+            <input matInput [(ngModel)]='money'>
+        </mat-form-field>
+
+
+        <mat-form-field>
+            <mat-label>保留账号(多个用 <span style="color: red;">| </span>分开)</mat-label>
+            <input matInput [(ngModel)]='keepAccount'>
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>阻止账号(多个用 <span style="color: red;">| </span>分开)</mat-label>
+            <input matInput [(ngModel)]='preventAccount'>
+        </mat-form-field>
+
+
+
+        <!-- <mat-form-field>
+            <mat-label>交易类型包含(多个类型用 <span style="color: red;">| </span>分开)</mat-label>
+            <input matInput [(ngModel)]='tradeType' [matAutocomplete]="autoTradeType">
+            <mat-autocomplete #autoTradeType>
+                <mat-option *ngFor="let item of tradeTypes" [value]=item>{{item}}</mat-option>
+            </mat-autocomplete>
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>收款方的商户名称包含(多个类型用 <span style="color: red;">| </span>分开)</mat-label>
+            <input matInput [(ngModel)]='payeeName' [matAutocomplete]="autoPayeeName">
+            <mat-autocomplete #autoPayeeName>
+                <mat-option *ngFor="let item of payeeNames" [value]=item>{{item}}</mat-option>
+            </mat-autocomplete>
+        </mat-form-field> -->
+    </div>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+    <button mat-button matDialogClose>取消</button>
+    <button mat-button (click)=onSubmit() matDialogClose>确定</button>
+</mat-dialog-actions>

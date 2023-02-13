@@ -1,0 +1,83 @@
+<h1 mat-dialog-title>{{ title }}</h1>
+<div mat-dialog-content>
+  <div *ngIf="isLogin" class="dialogContent">
+    <mat-form-field class="formField">
+      <input
+        matInput
+        placeholder="用户名"
+        [(ngModel)]="userName"
+        autocomplete="off"
+      />
+    </mat-form-field>
+
+    <mat-form-field class="formField">
+      <input
+        matInput
+        placeholder="密码"
+        [(ngModel)]="password"
+        autocomplete="off"
+      />
+    </mat-form-field>
+
+    <div class="btnDiv">
+      <button mat-flat-button color="accent" (click)="onLogin()">登录</button>
+      <button
+        mat-flat-button
+        cdkFocusInitial
+        color="primary"
+        (click)="onRegister()"
+      >
+        注册
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="!isLogin" class="dialogContent">
+    <mat-form-field class="formField">
+      <input
+        matInput
+        placeholder="用户名"
+        [(ngModel)]="userName"
+        autocomplete="off"
+      />
+    </mat-form-field>
+
+    <mat-form-field class="formField">
+      <input
+        matInput
+        placeholder="密码"
+        [(ngModel)]="password"
+        autocomplete="off"
+      />
+    </mat-form-field>
+
+    <mat-form-field class="formField">
+      <input
+        matInput
+        placeholder="姓名"
+        [(ngModel)]="realName"
+        autocomplete="off"
+      />
+    </mat-form-field>
+    <mat-form-field class="formField">
+      <input
+        matInput
+        placeholder="单位"
+        [(ngModel)]="unit"
+        autocomplete="off"
+      />
+    </mat-form-field>
+
+    <div class="btnDiv">
+      <button
+        mat-flat-button
+        cdkFocusInitial
+        color="primary"
+        (click)="onCancel()"
+      >
+        取消
+      </button>
+      <button mat-flat-button color="accent" (click)="onSubmit()">确定</button>
+    </div>
+  </div>
+</div>

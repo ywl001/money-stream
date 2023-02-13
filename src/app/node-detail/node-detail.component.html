@@ -1,0 +1,40 @@
+<h1 matDialogTitle>交易明细</h1>
+
+<mat-dialog-content>
+  <p *ngIf="data.account">查询账号：{{data.account}}</p>
+
+  <p *ngIf="data.accountBankName">付款银行卡银行名称：{{data.accountBankName}}</p>
+  <p *ngIf="data.accountBankNumber"> 付款银行卡号：{{data.accountBankNumber}}</p>
+  <p *ngIf='data.oppositeName'>对方账号姓名：{{data.oppositeName}}</p>
+  <div *ngIf="data.oppositeAccount" class="account"> 对方账号卡号：
+    <div style="color: darkred;">{{data.oppositeAccount}}</div>
+    <div class="clip" matTooltip="复制卡号" (cbOnSuccess)="onCbSuccess()" ngxClipboard [cbContent]="data.oppositeAccount">
+    </div>
+  </div>
+  <p *ngIf="data.oppositeBankName"> 收款银行卡银行名称：{{data.oppositeBankName}}</p>
+  <div *ngIf="data.oppositeBankNumber" class="account"> 收款银行卡号：
+    <div style="color: darkred;">{{data.oppositeBankNumber}}</div>
+    <div class="clip" matTooltip="复制卡号" (cbOnSuccess)="onCbSuccess()" ngxClipboard
+      [cbContent]="data.oppositeBankNumber">
+    </div>
+  </div>
+  <p *ngFor="let time of data.tradeTimes; let i = index">
+    交易时间：{{time.format('MM-DD HH:mm:ss')}}-->{{data.moneys[i]}}元-->流水号：{{data.tradeNumbers[i]}}
+  </p>
+
+  <p *ngIf="data.tradeType"> 交易类型：{{data.tradeType}}</p>
+  <p *ngIf="data.tradeResult"> 交易结果：{{data.tradeResult}}</p>
+  <p *ngIf="data.tradeDesc"> 交易摘要：{{data.tradeDesc}}</p>
+  <p *ngIf="data.inOrOut"> 借贷标志：{{data.inOrOut}}</p>
+  <p *ngIf="data.payeeNumber"> 收款方的商户号：{{data.payeeNumber}}</p>
+  <p *ngIf="data.payeeName"> 收款方的商户名称：{{data.payeeName}}</p>
+  <p *ngIf="data.tradeBankStationName"> 交易网点名称：{{data.tradeBankStationName}}</p>
+  <p *ngIf="data.tradeBankName"> 交易开户行：{{data.tradeBankName}}</p>
+  <p *ngIf="data.accountInfo?.remark" style="color:red"> 备注：{{data.accountInfo?.remark}}</p>
+  <p *ngIf="data.accountInfo?.returnMoney>0" style="color:red"> 可返现：{{data.accountInfo?.returnMoney}}元</p>
+  <p *ngIf="data.accountInfo?.returnedMoney>0" style="color:red"> 已返现：{{data.accountInfo?.returnedMoney}}元</p>
+  <div *ngIf="cashInfos && cashInfos?.length > 0">
+    <p *ngFor="let item of cashInfos let i = index" style="color:red">{{item.cashDate|date:'yyyy-MM-dd'}}在{{item.cashLocation}}取款{{item.cash}}元</p>
+  </div>
+  
+</mat-dialog-content>

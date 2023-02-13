@@ -1,0 +1,100 @@
+.root {
+  .show {
+    display: flex;
+    height: 150px;
+    width: 100%;
+    background-color: antiquewhite;
+
+    .photo {
+      height: 100%;
+      background-color: aqua;
+    }
+
+    .personInfo {
+      height: 100%;
+      padding: 0px 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+
+      img {
+        border-color: #04AA6D;
+        margin-right: 5px;
+        cursor: pointer;
+        border-radius: 50%;
+
+        border: 1px solid #978a65;
+
+        &:hover {
+          border-radius: 5px;
+          box-shadow: 0 0 10px red;
+        }
+      }
+    }
+
+    .btnContainer {
+      height: 100%;
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+    }
+  }
+
+  .edit {
+    display: flex;
+    background-color: beige;
+    min-width: 1000px;
+
+    min-height: 250px;
+
+    .photo {
+      height: 250px;
+      border: 1px solid black;
+      cursor: pointer;
+
+      &:hover {
+        content: url(../../assets/photo_over.png);
+      }
+    }
+
+    .fields {
+      height: 100%;
+      padding: 0px 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      flex: 1;
+
+      >* {
+        width: 100%
+      }
+
+
+      .btnContainer {
+        display: flex;
+        justify-content: center;
+        //   background-color:red;
+        margin-top: 20px;
+
+        >* {
+          margin-right: 50px;
+        }
+      }
+    }
+  }
+
+  .mt-5 {
+    margin-bottom: 5px;
+  }
+
+  .ml-5 {
+    margin-left: 5px;
+  }
+
+  .mat-flat-button,
+  .mat-button,
+  .mat-raised-button {
+    border-radius: 0;
+    // margin-bottom: -5px;
+  }
+}

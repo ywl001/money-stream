@@ -1,0 +1,60 @@
+<div class="root">
+  <mat-form-field>
+    <mat-label>起始账号：</mat-label>
+    <input [(ngModel)]="account" matInput autocomplete="off" />
+  </mat-form-field>
+
+  <div class="userName">
+    <mat-form-field>
+      <mat-label>账号姓名：</mat-label>
+      <input [(ngModel)]="accountName" matInput autocomplete="off" />
+    </mat-form-field>
+  </div>
+
+  <mat-form-field>
+    <input matInput [ngxMatDatetimePicker]="picker" placeholder="转账时间" [(ngModel)]="tradeTime"
+      (input)="onTradeTimeInputChange($event)" autocomplete="off" />
+    <mat-datepicker-toggle matSuffix [for]="$any(picker)"></mat-datepicker-toggle>
+    <ngx-mat-datetime-picker #picker [showSeconds]="true">
+    </ngx-mat-datetime-picker>
+    <ng-template>
+      <span>OK</span>
+    </ng-template>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>转账金额：</mat-label>
+    <input [(ngModel)]="money" matInput />
+  </mat-form-field>
+
+  <div style="
+      display: flex;
+      padding-bottom: 20px;
+      align-items: center;
+      width: 100%;
+    ">
+    <div style="width: 180px">公共查询时间：</div>
+
+    <mat-form-field style="width: 100px; margin-right: 5px">
+      <mat-label>天</mat-label>
+      <input matInput type="number" min="0" [(ngModel)]="day" autocomplete="off" />
+    </mat-form-field>
+
+    <mat-form-field style="width: 100px; margin-right: 5px">
+      <mat-label>小时</mat-label>
+      <input matInput type="number" min="0" max="23" [(ngModel)]="hour" autocomplete="off" />
+    </mat-form-field>
+
+    <mat-form-field style="width: 150px">
+      <mat-label>分钟</mat-label>
+      <input matInput type="number" min="0" max="59" [(ngModel)]="minute" autocomplete="off" />
+    </mat-form-field>
+  </div>
+
+  <div class="btnContainer">
+    <button mat-raised-button color="accent" mat-dialog-close>取消</button>
+    <button mat-raised-button color="primary" mat-dialog-close (click)="onSubmit()">
+      确定
+    </button>
+  </div>
+</div>

@@ -1,0 +1,13 @@
+<div class="root">
+  <ag-grid-angular #agGrid id="agGrid" class="ag-theme-alpine" [rowData]="gridData" [columnDefs]="columnDefs"
+    (gridReady)="onGridReady($event)" (rowDataChanged)="onRowDataChange()" (cellClicked)="onClick($event)" 
+    [rowSelection]="'single'" (cellDoubleClicked)=onDoubleClick($event) (cellMouseDown)=onCellMouseDown($event)
+    >
+  </ag-grid-angular>
+  <div class="btnContainer">
+    <button mat-raised-button color="primary" (click)=onOut()>出账统计</button>
+    <button mat-raised-button color="primary" (click)=onIn()>入账统计</button>
+    <button mat-raised-button color="primary" (click)=onAll()>所有记录</button>
+    <button mat-raised-button color="primary" (click)=onClearFilter()>清除过滤</button>
+  </div>
+</div>

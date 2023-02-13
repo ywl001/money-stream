@@ -1,0 +1,90 @@
+<h1 mat-dialog-title>设置账号信息</h1>
+<div style="width:1200px; height: auto;">
+    <div class="line">
+        <mat-form-field style="width: 350px;">
+            <mat-label>账号：</mat-label>
+            <input matInput autocomplete="off" [(ngModel)]="account" del-whitespace [disabled]="isAccountDisabled">
+        </mat-form-field>
+        <mat-form-field style="flex:1">
+            <mat-label>开户行或所属机构：</mat-label>
+            <input matInput autocomplete="off" [(ngModel)]="accountInfo.company" del-whitespace>
+        </mat-form-field>
+        <mat-form-field style="width: 200px;">
+            <mat-label>开户日期：</mat-label>
+            <input matInput autocomplete="off" [matDatepicker]="picker1" [(ngModel)]="createDate">
+            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+            <mat-datepicker #picker1></mat-datepicker>
+        </mat-form-field>
+    </div>
+
+    <div class="line">
+        <!-- <mat-form-field style="flex: 0.5;">
+                <mat-label>卡级别：</mat-label>
+                <input matInput autocomplete="off" formControlName="level">
+            </mat-form-field> -->
+
+        <mat-checkbox [(ngModel)]="isFreeze">冻结：</mat-checkbox>
+
+        <mat-form-field style="flex:1">
+            <mat-label>可返现数额：</mat-label>
+            <input matInput autocomplete="off" type="number" [(ngModel)]="accountInfo.returnMoney">
+        </mat-form-field>
+
+        <mat-form-field style="flex:1">
+            <mat-label>已返现数额：</mat-label>
+            <input matInput autocomplete="off" type="number" [(ngModel)]="accountInfo.returnedMoney">
+        </mat-form-field>
+    </div>
+
+    <div class="line">
+        <mat-form-field style="flex:1">
+            <mat-label>备注：</mat-label>
+            <textarea matInput cdkTextareaAutosize autocomplete="off" [(ngModel)]="accountInfo.remark" del-whitespace></textarea>
+        </mat-form-field>
+    </div>
+
+    <div>
+        <mat-checkbox [(ngModel)]=isDuigong>对公：</mat-checkbox>
+        <div class="line" *ngIf="isDuigong">
+            <mat-form-field style="width: 300px;">
+                <mat-label>公司名称：</mat-label>
+                <input matInput autocomplete="off" [(ngModel)]="accountInfo.gongsi" del-whitespace>
+            </mat-form-field>
+    
+            <mat-form-field style="flex:1">
+                <mat-label>公司地址：</mat-label>
+                <input matInput autocomplete="off"  [(ngModel)]="accountInfo.gongsiDizhi" del-whitespace>
+            </mat-form-field>
+    
+            <mat-form-field style="width: 200px;">
+                <mat-label>证照号码：</mat-label>
+                <input matInput autocomplete="off"  [(ngModel)]="accountInfo.zhengzhao" del-whitespace>
+            </mat-form-field>
+        </div>
+
+        <div class="line" *ngIf="isDuigong">
+            <mat-form-field style="flex:1">
+                <mat-label>工商注册号码：</mat-label>
+                <input matInput autocomplete="off" [(ngModel)]="accountInfo.gongshang" del-whitespace>
+            </mat-form-field>
+    
+            <mat-form-field style="flex:1">
+                <mat-label>国税纳税号：</mat-label>
+                <input matInput autocomplete="off"  [(ngModel)]="accountInfo.dishui" del-whitespace>
+            </mat-form-field>
+    
+            <mat-form-field style="flex:1">
+                <mat-label>地税纳税号：</mat-label>
+                <input matInput autocomplete="off"  [(ngModel)]="accountInfo.guoshui" del-whitespace>
+            </mat-form-field>
+        </div>
+    </div>
+
+</div>
+
+<div class="btnContainer" mat-dialog-actions>
+    <button mat-raised-button color="accent" mat-dialog-close>取消</button>
+    <button mat-raised-button color="primary" matDialogClose (click)="onSubmit()">
+        确定
+    </button>
+</div>

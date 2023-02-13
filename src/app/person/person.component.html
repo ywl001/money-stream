@@ -1,0 +1,13 @@
+<div class="root">
+
+  <app-person-display *ngIf="state == 'display'" [nodePerson]="nodePerson" (personChange)="currentPersonChange($event)"
+    (editPerson)="onEditPerson()" (removeRelationPerson)="onDelPerson()" (relationAccount)="onRelationAccount()"
+    (relationPerson)="onRelationPerson()"></app-person-display>
+
+  <hr>
+  <app-person-account *ngIf="state == 'display'" #personAccounts [person]="currentPerson"></app-person-account>
+
+  <app-person-edit *ngIf="state!= 'display'" [person]="currentPerson" [state]="state" (selectPersonComplete)="onSelectPerson($event)"
+    [isFromNode]="isFromNode"></app-person-edit>
+
+</div>

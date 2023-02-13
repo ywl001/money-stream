@@ -1,0 +1,30 @@
+<div class="root">
+  <h1 mat-dialog-title>{{title}}</h1>
+  <mat-form-field>
+    <mat-label>案件编号：</mat-label>
+    <input [(ngModel)]="caseNumber" matInput>
+    <img src="assets/random.png" *ngIf="!isLocalCase" matSuffix width="30px" height="30px" style="cursor:pointer;"
+      (click)="onCreateRandomCaseNumber()" matTooltip="随机案件编号">
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>案件名称：</mat-label>
+    <input matInput [(ngModel)]='caseName' [disabled]="isDisabled" autocomplete="off">
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>案件内容：</mat-label>
+    <textarea matInput [(ngModel)]='caseContent' cdkTextareaAutosize [disabled]="isDisabled"></textarea>
+  </mat-form-field>
+
+  <div>
+    <mat-label>本地案件：</mat-label>
+    <mat-checkbox [(ngModel)]="isLocalCase"></mat-checkbox>
+  </div>
+
+  <div class='btnContainer'>
+    <button mat-raised-button color='primary' mat-dialog-close (click)=onSubmit()>确定</button>
+    <button mat-raised-button color='accent' mat-dialog-close>取消</button>
+  </div>
+
+</div>

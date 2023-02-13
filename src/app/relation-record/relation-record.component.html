@@ -1,0 +1,36 @@
+<div>
+    <div *ngIf="isRelationedCase">
+        <div>
+            <p>{{relationCase?.caseNumber}}</p>
+            <p>{{relationCase?.caseName}}</p>
+        </div>
+    </div>
+
+    <div *ngIf="isOutRecord && isCreateUser ">
+        <button *ngIf="markMoney==0 && !isNextNode " mat-raised-button color="primary" (click)=onMarkMoney(1)
+            matDialogClose>标记取现记录</button>
+        <button style="margin-top: 20px;" *ngIf="!isNextNode" mat-raised-button color="warn" (click)=onSetNextNode(1)
+            matDialogClose>设置为下级节点</button>
+        <!-- <button *ngIf="markMoney == 0 || markMoney == 2" mat-raised-button color="primary" (click)=onMarkMoney(3)
+            matDialogClose>标记已返现记录</button> -->
+    </div>
+
+    <div *ngIf="isCreateUser">
+        <button *ngIf="markMoney!=0" mat-raised-button color="primary" (click)=onMarkMoney(0)
+            matDialogClose>取消标记取现记录</button>
+        <button style="margin-top: 20px;"  *ngIf="isNextNode" mat-raised-button color="warn" (click)=onSetNextNode(null)
+            matDialogClose>取消设置下级节点</button>
+        <!-- <button *ngIf="markMoney == 3" mat-raised-button color="primary" (click)=onDelMarkMoney()
+            matDialogClose>取消标记已返现记录</button> -->
+    </div>
+
+    <div *ngIf="isCreateUser && isInRecord && !isRelationedCase">
+        <button mat-raised-button color="primary" (click)=onRelationCurrentCase() matDialogClose>关联当前案件</button>
+        <hr>
+        <app-law-case [state]=lawcaseState [isLocalCase]="false" [title]="'关联其他案件'"></app-law-case>
+    </div>
+
+    <button *ngIf="isCreateUser && isRelationedCase" mat-raised-button color="warn" (click)=onDelRelation()
+        matDialogClose>删除关联案件</button>
+
+</div>

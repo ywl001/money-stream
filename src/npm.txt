@@ -1,0 +1,8 @@
+ng add @angular/material
+npm i @angular-material-components/datetime-picker
+npm i @angular-material-components/moment-adapter
+npm i @cycle/storage
+npm install --save ag-grid-community ag-grid-angular
+npm install pinyin-pro
+npm install --save sweetalert
+npm install xlsx

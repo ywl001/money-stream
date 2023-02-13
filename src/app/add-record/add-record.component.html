@@ -1,0 +1,49 @@
+<div class="root">
+    <h1 mat-dialog-title>添加记录</h1>
+    <mat-form-field>
+        <mat-label>付款帐号：</mat-label>
+        <input [(ngModel)]="account" matInput>
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>收款帐号：</mat-label>
+        <input matInput [(ngModel)]='oppositeAccount'>
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>收款方名称：</mat-label>
+        <input matInput [(ngModel)]='oppositeName'>
+    </mat-form-field>
+
+    <mat-form-field>
+        <input matInput [ngxMatDatetimePicker]="picker" placeholder="转账时间" [(ngModel)]="tradeTime" autocomplete="off" />
+        <mat-datepicker-toggle matSuffix [for]="$any(picker)"></mat-datepicker-toggle>
+        <ngx-mat-datetime-picker #picker [showSeconds]="true">
+        </ngx-mat-datetime-picker>
+        <ng-template>
+            <span>OK</span>
+        </ng-template>
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>交易金额：</mat-label>
+        <input matInput [(ngModel)]='money'>
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>借贷标志：</mat-label>
+        <input matInput [(ngModel)]='inOrOut'>
+    </mat-form-field>
+
+    <!-- 
+    <div>
+      <mat-label>本地案件：</mat-label>
+      <mat-checkbox [(ngModel)]="isLocalCase"></mat-checkbox>
+    </div> -->
+
+    <div class='btnContainer'>
+        <button mat-raised-button color='primary' mat-dialog-close (click)=onSubmit()>确定</button>
+        <button mat-raised-button color='accent' mat-dialog-close>取消</button>
+    </div>
+
+</div>

@@ -1,0 +1,25 @@
+.root{
+    height: 100%;
+    width: 100%;
+    // overflow: hidden;
+    display: flex;
+    flex-direction: column;
+
+    #agGrid{
+        flex:1;
+    }
+
+    .btnContainer{
+        display: flex;
+
+        >*{
+            margin-right: 50px;
+            margin-top: 20px;
+        }
+    }
+
+    .cell-text{
+        white-space: normal !important;
+    }
+
+}
