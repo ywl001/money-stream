@@ -1,0 +1,31 @@
+<div class="root">
+
+  <div class="leftContainer">
+    <div class="left-top">
+      <button style="width: 100%;height:100%;border-radius: 0;" mat-raised-button color="primary" (click)=onAddCase()>添加案件</button>
+    </div>
+    <div class="left-middle">
+      <app-records></app-records>
+    </div>
+  </div>
+
+  <div class="rightContainer">
+    <app-chart id="chart"></app-chart>
+  </div>
+
+  <div class="btnContainer">
+    <button mat-raised-button color="primary" (click)=onCountPersonInfo()>统计信息</button>
+    <!-- <button mat-raised-button color="primary" (click)=onCountInfo()>取现统计</button>
+    <button mat-raised-button color="primary" (click)=onCountInfo()>返现统计</button> -->
+    <button mat-raised-button color="primary" (click)=onRefresh()>刷新图表</button>
+    <button mat-raised-button color="primary" (click)=onQueryAccount()>查询账号</button>
+    <button mat-raised-button color="primary" (click)=onSaveImage()>保存图片</button>
+    <button mat-raised-button color="primary" (click)=onLayout($event)>横向排列</button>
+    <button mat-raised-button color="primary" (click)=onLogin()>{{loginLabel}}</button>
+    <!-- <button mat-raised-button color="primary" (click)=onLogin()>{{btnloginLabel}}</button> -->
+  </div>
+  
+  <div class="preLoad loader loader-default" [class.is-active]="isShowBusyIcon"></div>
+
+  <div id="toggleLeft" class="toggleLeft" (click)="onToggleLeft()"></div>
+</div>
