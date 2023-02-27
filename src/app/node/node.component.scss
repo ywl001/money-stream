@@ -4,7 +4,7 @@
   // background-color: #feeeda !important;
   // background-color: #e4e4e4 !important;
   // background-color: #b9e9f1 !important;
-  background-color: #d5f3f4 !important;
+  // background-color: #d5f3f4;
   // color: #646ada;
   // color: #2b5e79;
   // color: white;
@@ -14,6 +14,8 @@
   background: no-repeat center top;
   background-size: 100%;
   display: flex;
+  // flex-wrap: wrap;
+  
 
   .img-container {
     display: flex;
@@ -22,27 +24,49 @@
     background-color: aliceblue;
     font-size: 10px;
 
-    .label{
+    .label {
       position: absolute;
       bottom: 20px;
       align-items: center;
       width: 60px;
       height: 25px;
-      
       background-size: 100% 100%;
     }
 
-    .daji{
+    .tipIcon {
+      position: absolute;
+      left: 0;
+      width: 24px;
+      height: 24px;
+      background-size: 100% auto;
+      border-radius: 5px;
+      border: 1px solid #666666;
+      cursor: pointer;
+      background-image: url("../../assets/workTip.jpg");
+
+      &:hover {
+        background-image: url("../../assets/workTip_over.jpg");
+        opacity: 1;
+      }
+    }
+
+    .daji {
       background-image: url("../../assets/daji.jpg");
     }
-    .luodi{
+
+    .luodi {
       background-image: url("../../assets/luodi.jpg");
+    }
+
+    .quanzhanghu {
+      background-image: url("../../assets/quanzhanghu.jpg");
     }
   }
 
   .text-container {
     display: flex;
     flex-flow: wrap column;
+
     p {
       max-width: 280px;
       min-width: 240px;
@@ -51,12 +75,21 @@
       padding: 1px 5px;
       word-break: break-all;
     }
-    .image-container{
+
+    .bigimg {
+      position: absolute;
+      right: 0;
+      top: 0;
+      height: 100%;
+    }
+
+    .image-container {
       display: flex;
       position: absolute;
       right: 0;
       bottom: 0;
-      img{
+
+      img {
         height: 25px;
         width: 25px;
         margin-right: 3px;
@@ -66,29 +99,26 @@
   }
 
   .btn-container {
-   
     position: absolute;
     top: -25px;
     right: 0px;
     opacity: 0;
     display: flex;
-    flex-direction: row;
+    flex-wrap: nowrap;
     justify-content: flex-end;
-    width: auto;
     background-color: lightyellow;
+    // width: auto;
 
     &:hover {
       opacity: 1;
     }
 
-    > * {
-      margin-right: 5px;
-    }
-
-    .btn_container2 {
+    .btn-user{
       display: flex;
-      flex-direction: row;
-      justify-content: flex-end;
+
+      .btn-container-account{
+        display: flex;
+      }
     }
 
     .btn {
@@ -125,6 +155,14 @@
 
       &:hover {
         background-image: url("../../assets/edit2_over.png");
+      }
+    }
+
+    .btnWorkTips {
+      background-image: url("../../assets/workTip.png");
+
+      &:hover {
+        background-image: url("../../assets/workTip_over.png");
       }
     }
 
@@ -196,13 +234,52 @@
       background-image: url("../../assets/person2.png");
     }
   }
+
+  .btn-fold-v{
+    // justify-content: center;
+    // align-self: flex-end;
+    position:absolute;
+    background-image: url("../../assets/fold.png");
+    background-size: 100% auto;
+    width: 20px;
+    height: 20px;
+
+    left: 0; 
+    right: 0; 
+    bottom: 0;
+    margin: auto;
+    
+    &:hover{
+      background-image: url("../../assets/fold_over.png");
+    }
+  }
+
+  .btn-fold-h{
+    position:absolute;
+    background-image: url("../../assets/fold.png");
+    background-size: 100% auto;
+    width: 20px;
+    height: 20px;
+
+    right: 0; 
+    top: 0;
+    bottom: 0;
+    margin: auto;
+
+    rotate: -90deg;
+    
+    &:hover{
+      background-image: url("../../assets/fold_over.png");
+    }
+  }
 }
+
 .selected {
   border: 3px solid red !important;
   // transform: scale(1.1);
 }
 
 //mat tool-tip的换行
-::ng-deep .mat-tooltip{
+::ng-deep .mat-tooltip {
   white-space: pre-wrap;
 }

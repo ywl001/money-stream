@@ -1,10 +1,18 @@
 import {
   ChangeDetectionStrategy, ChangeDetectorRef, Component
 } from '@angular/core';
-import { MatDialogRef, MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { UpdateStr } from '@ngrx/entity/src/models';
 import { Store } from '@ngrx/store';
+import copy from 'fast-copy';
+import { iif, mergeMap, take, tap } from 'rxjs';
+import swal from 'sweetalert';
+import * as toastr from 'toastr';
+import { AccountComponent } from '../account/account.component';
 import { AccountNode } from '../app-state/accountNode';
-import { selector_isCreateUser, selector_nodes, selector_selectedLawcaseId } from '../app-state/app.selector';
+import { action_refreshNodes, action_updateNodeSuccess } from '../app-state/app.action';
+import { selector_isCreateUser, selector_nodes, selector_selectedLawcaseId, selector_user } from '../app-state/app.selector';
+import { PhpFunctionName } from '../app-state/phpFunctionName';
 import {
   // AccountExtension,
   AccountInfo,
@@ -14,14 +22,6 @@ import {
 } from '../app-state/types';
 import { MessageService } from '../service/message.service';
 import { SqlService } from '../service/sql.service';
-import swal from 'sweetalert';
-import { iif, mergeMap, of, take } from 'rxjs';
-import { PhpFunctionName } from '../app-state/phpFunctionName';
-import copy from 'fast-copy';
-import { action_refreshNodes, action_updateNodeSuccess } from '../app-state/app.action';
-import * as toastr from 'toastr';
-import { UpdateStr } from '@ngrx/entity/src/models';
-import { AccountComponent } from '../account/account.component';
 
 
 export enum PersonState {
@@ -132,6 +132,7 @@ export class PersonComponent {
    * 当前案件id，在新插入account info 时使用
    */
   private caseID: string;
+  private userID:string;
 
   constructor(
     private cdr: ChangeDetectorRef,
@@ -146,6 +147,7 @@ export class PersonComponent {
 
   ngOnInit() {
     this.store.select(selector_selectedLawcaseId).pipe(take(1)).subscribe(res => this.caseID = res)
+    this.store.select(selector_user).pipe(take(1)).subscribe(res => this.userID = res.id)
   }
 
   currentPersonChange(p: Person) {
@@ -252,16 +254,29 @@ export class PersonComponent {
     const data_update: any = {
       tableName: TableName.ACCOUNT_INFO,
       tableData: { personID: pid },
-      id: this.node?.accountInfo?.id
+      // id: this.node?.accountInfo?.id
     };
+
+    console.log('update account info data:,', data_update)
 
     const data_insert = {
       tableName: TableName.ACCOUNT_INFO,
-      tableData: { personID: pid, account: acc, caseID: this.caseID }
+      tableData: { personID: pid, account: acc, caseID: this.caseID ,userID:this.userID}
     };
 
-    return this.sqlService.exec(PhpFunctionName.SELECT_ACCOUNT_INFO_BY_ACCOUNT, acc).pipe(
+    console.log('insert account info data:,', data_insert)
 
+    // return this.sqlService.exec(PhpFunctionName.SELECT_ACCOUNT_INFO_BY_ACCOUNT, acc).pipe(
+    //   tap(x=>console.log(x)),
+
+    // )
+
+    return this.sqlService.exec(PhpFunctionName.SELECT_ACCOUNT_INFO_BY_ACCOUNT, acc).pipe(
+      tap(res => {
+        if (res?.length > 0) {
+          data_update.id = res[0].id
+        }
+      }),
       mergeMap(res => iif(
         () => res.length > 0,
         this.sqlService.exec(PhpFunctionName.UPDATE, data_update),

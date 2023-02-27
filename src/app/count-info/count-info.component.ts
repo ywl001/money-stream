@@ -13,28 +13,31 @@ import * as XLSX from 'xlsx';
 export class CountInfoComponent implements OnInit {
 
   columnDefs = [
-    { field: 'account', headerName: '查询账号', filter: true, resizable: true },
+    // { field: 'account', headerName: '查询账号', filter: true, resizable: true },
+    // { field: 'returnMoney', headerName: '可返现', filter: true, resizable: true },
+    // { field: 'returnedMoney', headerName: '已返现', resizable: true, filter: true, },
+    // { field: 'cashInfos', headerName: '取现', resizable: true, filter: true},
+    // { field: 'isFreeze', headerName: '冻结', sortable: true, resizable: true },
+    // { field: 'isDaji', headerName: '可打击', resizable: true, filter: true, },
+    // { field: 'isLuodi', headerName: '需落地', resizable: true, filter: true, },
+    // { field: '', headerName: '需落地', resizable: true, filter: true, },
     { field: 'caseName', headerName: '案件名称', filter: true, resizable: true, sortable: true },
-    { field: 'returnMoney', headerName: '可返现', filter: true, resizable: true },
-    { field: 'returnedMoney', headerName: '已返现', resizable: true, filter: true, },
-    { field: 'cashInfos', headerName: '取现', resizable: true, filter: true},
-    { field: 'isFreeze', headerName: '冻结', sortable: true, resizable: true },
     { field: 'name', headerName: '姓名', sortable: true, resizable: true, filter: true, },
-    { field: 'isDaji', headerName: '可打击', resizable: true, filter: true, },
-    { field: 'isLuodi', headerName: '需落地', resizable: true, filter: true, },
     { field: 'personNumber', headerName: '身份证号', resizable: true },
     { field: 'currentAddress', headerName: '居住地', resizable: true },
     { field: 'address', headerName: '户籍地', resizable: true },
+    { field: 'personType', headerName: '人员类型', resizable: true, filter: true, },
+    { field: 'realName', headerName: '研判人员', resizable: true, filter: true, },
   ];
 
-  personDefs = [
-    { field: 'name', headerName: '姓名', sortable: true, resizable: true, filter: true, },
-    { field: 'personNumber', headerName: '身份证号', resizable: true },
-    { field: 'currentAddress', headerName: '居住地', resizable: true },
-    { field: 'address', headerName: '户籍地', resizable: true },
-    { field: 'caseName', headerName: '案件名称', filter: true, resizable: true, sortable: true },
-    { field: 'personType', headerName: '人员类型', resizable: true, filter: true, },
-  ]
+  // personDefs = [
+  //   { field: 'name', headerName: '姓名', sortable: true, resizable: true, filter: true, },
+  //   { field: 'personNumber', headerName: '身份证号', resizable: true },
+  //   { field: 'currentAddress', headerName: '居住地', resizable: true },
+  //   { field: 'address', headerName: '户籍地', resizable: true },
+  //   { field: 'caseName', headerName: '案件名称', filter: true, resizable: true, sortable: true },
+  //   { field: 'personType', headerName: '人员类型', resizable: true, filter: true, },
+  // ]
 
   private columnApi: ColumnApi;
   private gridApi: GridApi;
@@ -50,8 +53,21 @@ export class CountInfoComponent implements OnInit {
     console.log('set data')
     let newValue = copy(value);
     // this.fromatCashInfo(newValue);
-    this._data = newValue;
-    this.allRecord = newValue;
+
+
+    this.allRecord = this.processData(newValue);
+    this._data = this.allRecord;
+  }
+
+  private processData(data:any[]){
+    data.forEach(item=>{
+      if(item.isDaji == 1){
+        item.personType = '可打击'
+      }else if(item.isLuodi == 1){
+        item.personType = '需落地'
+      }
+    })
+    return data;
   }
 
   get data() {
@@ -112,7 +128,7 @@ export class CountInfoComponent implements OnInit {
     let data = [];
     for (var i = 0; i < count; i++) {
       var rowNode = this.gridApi.getDisplayedRowAtIndex(i);
-      data.push(rowNode.data);
+      data.push(this.convertData(rowNode.data));
     }
     const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(data);
 
@@ -123,6 +139,20 @@ export class CountInfoComponent implements OnInit {
     /* save to file */
     let fileName = '统计信息';
     XLSX.writeFile(wb, fileName + ".xlsx");
+  }
+
+  private convertData(data:any){
+
+    var o:any = {}
+    o['案件名称']=data.caseName;
+    o['姓名']=data.name;
+    o['身份证号']=data.personNumber;
+    o['居住地']=data.currentAddress;
+    o['户籍']=data.address;
+    o['人员类型']=data.personType;
+    o['研判人员']=data.realName;
+
+    return o;
   }
 
 }

@@ -30,7 +30,7 @@ export interface StartNode {
   account?: string;
   tradeTime?: string;
   accountName?: string;
-  money?: string;
+  money?: number;
   queryDuration?: string;
   remark?: string;
   commonQueryDuration?: string;
@@ -117,6 +117,8 @@ export interface Person {
   isDaji?: number;
   relationAccounts?:AccountInfo[]
   photo?:ArrayBuffer ;
+
+  workTips?:number;
   /**
    * 前科情况
    */
@@ -176,6 +178,9 @@ export interface AccountInfo {
 
   personID?: string;
   caseID?: string;
+  userID?:string;
+
+  workTips?:number;
 
   level?: string;
 

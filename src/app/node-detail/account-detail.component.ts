@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { AccountNode } from '../app-state/accountNode';
 import * as toastr from 'toastr';
-import * as moment from 'moment';
+import { AccountNode } from '../app-state/accountNode';
 
 @Component({
   selector: 'app-node-detail',

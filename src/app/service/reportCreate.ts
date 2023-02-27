@@ -1,10 +1,8 @@
 import { Store } from "@ngrx/store";
-import { Document, AlignmentType, VerticalAlign, Paragraph } from "docx";
+import { AlignmentType, Document, VerticalAlign } from "docx";
 import { AppInjector } from "../app-injector";
-import { selector_startAccounts, selector_user } from "../app-state/app.selector";
-import { AccountInfo, Lawcase, Person, TradeRecord, User } from "../app-state/types";
+import { AccountInfo, Lawcase, Person, TradeRecord } from "../app-state/types";
 import { DocCreate as DocCreator, firstLine, Font } from "./docCreator";
-import { map } from 'rxjs'
 
 export class ReportCreate {
 
@@ -299,7 +297,7 @@ export class ReportCreate {
     private checkJuhao(str: string) {
         if (str) {
             str = str.trim();
-            if (str.charAt(str.length - 1) == '。' || str == '') {
+            if (str.charAt(str.length - 1) == '。' || str == '' || str == '：' || str==':') {
                 return str;
             }
             if (str.charAt(str.length - 1) == '，' || str.charAt(str.length - 1) == ',' || str.charAt(str.length - 1) == '　') {

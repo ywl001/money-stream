@@ -1,31 +1,26 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Actions, concatLatestFrom, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
-import * as moment from 'moment';
 import * as fileSaver from 'file-saver';
-import * as toastr from 'toastr';
+import * as moment from 'moment';
 import {
-  catchError,
-  filter,
+  catchError, EMPTY, filter,
   map,
-  mergeMap,
-  EMPTY,
-  Observable,
-  pluck,
-  switchMap,
+  mergeMap, switchMap,
   take,
-  tap,
+  tap
 } from 'rxjs';
-import { AccountNode } from './accountNode';
-import { PhpFunctionName } from './phpFunctionName';
+import * as toastr from 'toastr';
 import { ServerConfig } from '../server.config';
 import { FileService } from '../service/file.service';
+import { LocalStorgeService } from '../service/local-storge.service';
+import { MessageService } from '../service/message.service';
 import { NodeService } from '../service/node.service';
 import { SqlService } from '../service/sql.service';
+import { AccountNode } from './accountNode';
 import {
-  action_addNode,
-  action_addNodeSuccess,
-  action_delAccountRecord,
+  action_addNode, action_delAccountRecord,
   action_delAccountRecordSuccess,
   action_delNode,
   action_delStartNode,
@@ -52,10 +47,7 @@ import {
   // action_getPersonInfoSuccess,
   action_getStartNode,
   action_getStartNodeSuccess,
-  action_getUserCase,
-  action_insertAccountInfo,
-  action_insertAccountInfoSuccess,
-  action_insertCaseSuccess,
+  action_getUserCase, action_insertCaseSuccess,
   action_insertLawase,
   action_insertStartNode,
   action_insertStartNodeSuccess,
@@ -68,11 +60,7 @@ import {
   action_relationRecord,
   action_relationRecordSuccess,
 
-  action_test,
-  action_udateAccountInfoSuccess,
-  action_updateAccountInfo,
-
-  action_updateLawcase,
+  action_test, action_updateLawcase,
   action_updateLawcaseSuccess,
   action_updateLowerAccount,
   action_updateNodeDuration,
@@ -83,19 +71,13 @@ import {
   // action_updatePerson,
   // action_updatePersonSuccess,
   action_updateStartNode,
-  action_updateStartNodeSuccess,
+  action_updateStartNodeSuccess
 } from './app.action';
 import {
-  selector_selectedLawcase,
-  selector_selectedNode,
-  selector_selectedStartAccount,
+  selector_selectedLawcase, selector_selectedStartAccount
 } from './app.selector';
-import { CaseState, LOCALSTORAGE_NODE_KEY_PRE, SqlData, StartNode, TableName, TradeRecord } from './types';
-import { LocalStorgeService } from '../service/local-storge.service';
-import copy from 'fast-copy';
-import { MessageService } from '../service/message.service';
-import { UpdateStr } from '@ngrx/entity/src/models';
-import { HttpClient } from '@angular/common/http';
+import { PhpFunctionName } from './phpFunctionName';
+import { CaseState, LOCALSTORAGE_NODE_KEY_PRE, StartNode, TableName } from './types';
 
 @Injectable()
 export class AppEffects {
@@ -501,7 +483,7 @@ export class AppEffects {
     this.actions$.pipe(
       ofType(action_getCountInfo),
       mergeMap((action) =>
-        this.sqlService.exec(PhpFunctionName.SELECT_COUNT_INFO, null).pipe(
+        this.sqlService.exec(PhpFunctionName.SELECT_PERSON_INFO, null).pipe(
           map((res) => {
             return action_getCountInfoSuccess({ countInfo: res });
           })
@@ -709,7 +691,7 @@ export class AppEffects {
     startNode.level = 0;
     startNode.tradeTimes.push(moment(item.tradeTime));
     startNode.ids.push(item.id);
-    startNode.moneys.push(parseFloat(item.money));
+    startNode.moneys.push(item.money);
     startNode.commonQueryDuration = parseInt(item.commonQueryDuration);
     // startNode.remark = item.remark;
     return startNode;

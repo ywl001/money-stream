@@ -1,0 +1,7 @@
+<div class="root">
+    <ag-grid-angular #agGrid id="agGrid" class="ag-theme-alpine"
+     [rowData]="gridData" [columnDefs]="columnDefs"
+        (gridReady)="onGridReady($event)" (rowDataChanged)="onRowDataChange()"
+        (cellDoubleClicked)=onDoubleClick($event)>
+    </ag-grid-angular>
+</div>

@@ -1,23 +1,21 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { CellEvent, ColDef, ColumnApi, GridApi, RefreshCellsParams } from 'ag-grid-community';
-import { AccountNode } from '../app-state/accountNode';
-import * as moment from 'moment'
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { Store } from '@ngrx/store';
+import { CellEvent, ColDef, ColumnApi, GridApi } from 'ag-grid-community';
+import copy from 'fast-copy';
+import * as moment from 'moment';
 import { Moment } from 'moment';
 import { ClipboardService } from 'ngx-clipboard';
-import * as toastr from 'toastr'
-import { ButtonRendererComponent } from './button-renderer/button-renderer.component';
-import { Lawcase, TradeRecord } from '../app-state/types';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { AddRecordCaseComponent } from '../relation-record/relation-record.component';
-import { ThisReceiver } from '@angular/compiler';
-import { Store } from '@ngrx/store';
-import { selector_accountRecord, selector_isCreateUser, selector_nodes, selector_selectedLawcase, selector_selectedNode } from '../app-state/app.selector';
 import { filter, skip, Subscription, take } from 'rxjs';
+import * as toastr from 'toastr';
+import { AccountNode } from '../app-state/accountNode';
 import { action_getAccountRecord, action_updateNodeSuccess } from '../app-state/app.action';
-import { concatLatestFrom } from '@ngrx/effects';
-import { SqlService } from '../service/sql.service';
+import { selector_accountRecord, selector_isCreateUser, selector_nodes, selector_selectedLawcase, selector_selectedNode } from '../app-state/app.selector';
 import { PhpFunctionName } from '../app-state/phpFunctionName';
-import copy from 'fast-copy';
+import { Lawcase, TradeRecord } from '../app-state/types';
+import { RelationRecordComponent } from '../relation-record/relation-record.component';
+import { SqlService } from '../service/sql.service';
+import { ButtonRendererComponent } from './button-renderer/button-renderer.component';
 
 interface AccoutnCount {
   account: string;
@@ -164,7 +162,7 @@ export class DataGridComponent implements OnInit {
             if(this.clickedRowIndex > 20){
               this.gridApi.ensureIndexVisible(this.clickedRowIndex,'middle');
             }
-          }, 100);
+          }, 300);
 
         } else {
           // this.dialogRef.close()
@@ -381,8 +379,9 @@ export class DataGridComponent implements OnInit {
 
       this.store.select(selector_isCreateUser).pipe(take(1)).subscribe(res => {
         if (res || e.data.relationCaseID) {
-          let ref = this.dialog.open(AddRecordCaseComponent);
+          let ref = this.dialog.open(RelationRecordComponent);
           ref.componentInstance.data = e.data;
+          ref.componentInstance.parentDialogRef = this.dialogRef;
         }
       })
     }
@@ -397,8 +396,6 @@ export class DataGridComponent implements OnInit {
     this.cbs.copy(e.value)
     toastr.success('已复制')
   }
-
-
 
   private getCountData(type: string): AccoutnCount[] {
     let map = new Map<string, AccoutnCount>();

@@ -3,10 +3,9 @@ import { Store } from '@ngrx/store';
 import { AccountNode } from 'src/app/app-state/accountNode';
 import { selector_isCreateUser } from 'src/app/app-state/app.selector';
 import { PhpFunctionName } from 'src/app/app-state/phpFunctionName';
-import { Person, TableName } from 'src/app/app-state/types';
+import { Person } from 'src/app/app-state/types';
 import { ServerConfig } from 'src/app/server.config';
 import { SqlService } from 'src/app/service/sql.service';
-import swal from 'sweetalert';
 
 @Component({
   selector: 'app-person-display',

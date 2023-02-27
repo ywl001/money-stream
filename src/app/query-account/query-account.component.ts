@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import { Lawcase, TableName } from '../app-state/types';
-import { PhpFunctionName } from '../app-state/phpFunctionName';
-import { SqlService } from '../service/sql.service';
-import * as toastr from 'toastr';
-import { MessageService } from '../service/message.service';
+import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
+import * as toastr from 'toastr';
+import { PhpFunctionName } from '../app-state/phpFunctionName';
+import { Lawcase } from '../app-state/types';
+import { MessageService } from '../service/message.service';
+import { SqlService } from '../service/sql.service';
 
 @Component({
   selector: 'app-query-account',

@@ -1,0 +1,139 @@
+.btn-container {
+
+    position: absolute;
+    top: -25px;
+    right: 0px;
+    opacity: 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    width: auto;
+    background-color: lightyellow;
+
+    &:hover {
+        opacity: 1;
+    }
+
+    >* {
+        margin-right: 5px;
+    }
+
+    .btn-container2 {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+    }
+
+    .btn {
+        width: 24px;
+        height: 24px;
+        background-size: 100% auto;
+        cursor: pointer;
+
+        margin-left: 2px;
+
+        &:hover {
+            opacity: 1;
+        }
+    }
+
+    .btnDel {
+        background-image: url("../../../assets/delete.png");
+
+        &:hover {
+            background-image: url("../../../assets/delete_over.png");
+        }
+    }
+
+    .btnFilter {
+        background-image: url("../../../assets/filter.png");
+
+        &:hover {
+            background-image: url("../../../assets/filter_over.png");
+        }
+    }
+
+    .btnEdit {
+        background-image: url("../../../assets/edit2.png");
+
+        &:hover {
+            background-image: url("../../../assets/edit2_over.png");
+        }
+    }
+
+    .btnWorkTips {
+        background-image: url("../../../assets/workTip.png");
+
+        &:hover {
+            background-image: url("../../../assets/workTip_over.png");
+        }
+    }
+
+    .btnDownload {
+        background-image: url("../../../assets/download.png");
+
+        &:hover {
+            background-image: url("../../../assets/download_over.png");
+        }
+    }
+
+    .btnAttachment {
+        background-image: url("../../../assets/attachment.png");
+
+        &:hover {
+            background-image: url("../../../assets/attachment_over.png");
+        }
+    }
+
+    .btnConnect {
+        background-image: url("../../../assets/connect.png");
+
+        &:hover {
+            background-image: url("../../../assets/connect_over.png");
+        }
+    }
+
+    .btnDuration {
+        background-image: url("../../../assets/duration.png");
+
+        &:hover {
+            background-image: url("../../../assets/duration_over.png");
+        }
+    }
+
+    .btnRemark {
+        background-image: url("../../../assets/remark.png");
+
+        &:hover {
+            background-image: url("../../../assets/remark_over.png");
+        }
+    }
+
+    .btnFreeze {
+        background-image: url("../../../assets/snow.png");
+
+        &:hover {
+            background-image: url("../../../assets/snow_over.png");
+        }
+    }
+
+    .btnPerson {
+        background-image: url("../../../assets/person.png");
+
+        &:hover {
+            background-image: url("../../../assets/person_over.png");
+        }
+    }
+
+    .btnAddRecord {
+        background-image: url("../../../assets/add-record.png");
+
+        &:hover {
+            background-image: url("../../../assets/add-record-over.png");
+        }
+    }
+
+    .person {
+        background-image: url("../../../assets/person2.png");
+    }
+}

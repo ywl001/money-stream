@@ -14,7 +14,8 @@
   </div>
 
   <div class="btnContainer">
-    <button mat-raised-button color="primary" (click)=onCountPersonInfo()>统计信息</button>
+    <button mat-raised-button color="primary" (click)=onGetWorkTips()>待反馈账户</button>
+    <button mat-raised-button color="primary" (click)=onCountPersonInfo()>统计人员</button>
     <!-- <button mat-raised-button color="primary" (click)=onCountInfo()>取现统计</button>
     <button mat-raised-button color="primary" (click)=onCountInfo()>返现统计</button> -->
     <button mat-raised-button color="primary" (click)=onRefresh()>刷新图表</button>
@@ -24,8 +25,8 @@
     <button mat-raised-button color="primary" (click)=onLogin()>{{loginLabel}}</button>
     <!-- <button mat-raised-button color="primary" (click)=onLogin()>{{btnloginLabel}}</button> -->
   </div>
-  
-  <div class="preLoad loader loader-default" [class.is-active]="isShowBusyIcon"></div>
+
+  <!-- <mat-spinner class="spinner" *ngIf="isShowBusyIcon"></mat-spinner> -->
 
   <div id="toggleLeft" class="toggleLeft" (click)="onToggleLeft()"></div>
 </div>

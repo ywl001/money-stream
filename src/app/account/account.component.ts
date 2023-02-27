@@ -5,7 +5,7 @@ import * as moment from 'moment';
 import { map, take } from 'rxjs';
 import * as toastr from 'toastr';
 import { action_updateNodeSuccess } from '../app-state/app.action';
-import { selector_nodes, selector_selectedLawcaseId, selector_selectedNode } from '../app-state/app.selector';
+import { selector_nodes, selector_selectedLawcaseId, selector_selectedNode, selector_user } from '../app-state/app.selector';
 import { PhpFunctionName } from '../app-state/phpFunctionName';
 import { AccountInfo, SqlData, TableName } from '../app-state/types';
 import { MessageService } from '../service/message.service';
@@ -112,6 +112,7 @@ export class AccountComponent implements OnInit {
 
   ngOnInit(): void {
     this.store.select(selector_selectedLawcaseId).pipe(take(1)).subscribe(res => this.accountInfo.caseID = res);
+    this.store.select(selector_user).pipe(take(1)).subscribe(res=>this.accountInfo.userID = res.id)
   }
 
 
@@ -139,8 +140,6 @@ export class AccountComponent implements OnInit {
     }
 
     if (!this.isAccountExists) {
-      this.accountInfo.isFreeze = this.isFreeze ? 1 : 0;
-      this.accountInfo.isDuigong = this.isDuigong ? 1 : 0;
       sqlData.tableData = this.accountInfo;
       console.log('insert new account', sqlData)
       this.sql.exec(PhpFunctionName.INSERT, sqlData).subscribe(res => {
@@ -153,7 +152,6 @@ export class AccountComponent implements OnInit {
         }
       })
     } else {
-      
       let data = this.getUpdateData(this.accountInfo_old, this.accountInfo)
       sqlData.tableData = data
       sqlData.id = this.accountInfo.id;

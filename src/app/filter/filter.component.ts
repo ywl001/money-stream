@@ -17,10 +17,14 @@ export class FilterComponent implements OnInit {
   // tradeTypes = ['支付账户消费'];
   // payeeNames = ['手续费', '基金'];
 
+  static KEY_MONEY = 'money';
+  static KEY_KEEP_ACCOUNT = 'keepAccount'
+  static KEY_PREVENT_ACCOUNT = 'preventAccount'
 
-  preventAccount:string
 
-  keepAccount:string
+  preventAccount: string
+
+  keepAccount: string
 
   private node: AccountNode;
 
@@ -33,17 +37,12 @@ export class FilterComponent implements OnInit {
       console.log(filterData);
       if (filterData) {
         this.money = filterData.money;
-        // if (filterData.tradeType) {
-        //   this.tradeType = filterData.tradeType.join('|');
-        // }
-        // if (filterData.payeeName) {
-        //   this.payeeName = filterData.payeeName.join('|');
-        // }
-        if (filterData.keepAccount) {
+
+        if (filterData[FilterComponent.KEY_KEEP_ACCOUNT]) {
           this.keepAccount = filterData.keepAccount.join('|')
         }
 
-        if (filterData.preventAccount) {
+        if (filterData[FilterComponent.KEY_PREVENT_ACCOUNT]) {
           this.preventAccount = filterData.preventAccount.join('|')
         }
       }
@@ -55,19 +54,13 @@ export class FilterComponent implements OnInit {
   onSubmit() {
     const tableData: any = {};
 
-    // if (this.tradeType && this.tradeType.trim() != '')
-    //   tableData.tradeType = this.tradeType.split('|');
-
-    // if (this.payeeName && this.payeeName.trim() != '')
-    //   tableData.payeeName = this.payeeName.split('|');
-
     if (this.keepAccount && this.keepAccount.trim() != '')
-      tableData.keepAccount = this.keepAccount.split('|');
+      tableData[FilterComponent.KEY_KEEP_ACCOUNT] = this.keepAccount.split('|');
 
     if (this.preventAccount && this.preventAccount.trim() != '')
-      tableData.preventAccount = this.preventAccount.split('|');
+      tableData[FilterComponent.KEY_PREVENT_ACCOUNT] = this.preventAccount.split('|');
 
-    if (this.money) tableData.money = this.money;
+    if (this.money) tableData[FilterComponent.KEY_MONEY] = this.money;
 
     const data = {
       tableData: { filter: JSON.stringify(tableData) },

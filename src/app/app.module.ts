@@ -19,6 +19,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { DragDropModule } from '@angular/cdk/drag-drop'
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 
 import {
   NgxMatDateAdapter,
@@ -74,7 +75,7 @@ import {
 import { CountInfoComponent } from './count-info/count-info.component';
 import { AddRecordComponent } from './add-record/add-record.component';
 import { ButtonRendererComponent } from './data-grid/button-renderer/button-renderer.component';
-import { AddRecordCaseComponent } from './relation-record/relation-record.component';
+import { RelationRecordComponent } from './relation-record/relation-record.component';
 import { AppInjector } from './app-injector';
 import { PersonAccountComponent } from './person/person-account/person-account.component';
 import { PersonEditComponent } from './person/person-edit/person-edit.component';
@@ -82,6 +83,8 @@ import { PersonDisplayComponent } from './person/person-display/person-display.c
 import { DelWhitespaceDirective } from './del-whitespace.directive';
 import { UploadAttachmentComponent } from './upload-attachment/upload-attachment.component';
 import { LoadingInterceptor } from './loading.interceptor';
+import { WorkTipsComponent } from './work-tips/work-tips.component';
+import { NodeMenuComponent } from './node/node-menu/node-menu.component';
 
 
 export const MY_FORMATS: NgxMatDateFormats = {
@@ -121,12 +124,14 @@ export const MY_FORMATS: NgxMatDateFormats = {
     CountInfoComponent,
     AddRecordComponent,
     ButtonRendererComponent,
-    AddRecordCaseComponent,
+    RelationRecordComponent,
     PersonAccountComponent,
     PersonEditComponent,
     PersonDisplayComponent,
     DelWhitespaceDirective,
-    UploadAttachmentComponent
+    UploadAttachmentComponent,
+    WorkTipsComponent,
+    NodeMenuComponent
   ],
   imports: [
     BrowserModule,
@@ -144,6 +149,7 @@ export const MY_FORMATS: NgxMatDateFormats = {
     MatAutocompleteModule,
     MatSidenavModule,
     MatListModule,
+    MatProgressSpinnerModule,
     DragDropModule,
     HttpClientModule,
     FormsModule,

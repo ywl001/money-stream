@@ -2,7 +2,7 @@ import { AccountInfo, Person, TradeRecord } from "./types";
 
 export class AccountNode {
   id?: string;
-  // caseID?: string;
+  caseID?: string;
   account?: string;
   accountName?: string;
   parentAccount?: AccountNode;
@@ -34,6 +34,7 @@ export class AccountNode {
   queryDuration?: number;
   isThird?: string;
   isLowerNode?: string;
+  isShowChild?:boolean;
 
   // remark?: string;
   // isFreeze?: boolean;

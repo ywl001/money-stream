@@ -1,49 +1,42 @@
 import {
-  Component,
-  ViewChild,
-  ElementRef,
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
+  ChangeDetectorRef, Component, ElementRef, ViewChild
 } from '@angular/core';
-import { LawCaseComponent } from '../law_case/law-case.component';
-import { StartNodeComponent } from '../start-node/start-node.component';
-import { AccountNode } from '../app-state/accountNode';
-import { LocalStorgeService } from '../service/local-storge.service';
-import { InsertExcelDataService } from '../service/insert-excel-data.service';
 import copy from 'fast-copy';
+import { AccountNode } from '../app-state/accountNode';
+import { LawCaseComponent } from '../law_case/law-case.component';
+import { InsertExcelDataService } from '../service/insert-excel-data.service';
+import { LocalStorgeService } from '../service/local-storge.service';
+import { StartNodeComponent } from '../start-node/start-node.component';
 
-import { Packer, Document, AlignmentType, HeightRule, Paragraph, Table, TableCell, TableRow, TextRun, VerticalAlign, WidthType, TextDirection } from 'docx';
-import { saveAs } from 'file-saver';
-import { FileUploader } from 'ng2-file-upload';
-import { ServerConfig } from '../server.config';
 import { FormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import swal from 'sweetalert';
-import { startWith, switchMap, filter, map, Observable } from 'rxjs';
+import { MatIconRegistry } from '@angular/material/icon';
+import { DomSanitizer } from '@angular/platform-browser';
 import { Store } from '@ngrx/store';
+import { Packer } from 'docx';
+import { saveAs } from 'file-saver';
+import * as moment from 'moment';
+import { FileUploader } from 'ng2-file-upload';
+import * as pinyin from 'pinyin';
+import { STYLE_FIRST_LETTER, STYLE_NORMAL } from 'pinyin';
+import { filter, map, startWith } from 'rxjs';
+import swal from 'sweetalert';
 import {
-  selector_isCreateUser,
-  selector_lawcases,
-  selector_selectedStartAccount,
-  selector_startAccounts,
-  selector_user,
-} from '../app-state/app.selector';
-import {
-  action_clearPersons,
   action_delStartNode,
-  action_getAllCase,
-  action_getAllCaseSuccess,
-  action_getNodes,
+  action_getAllCase, action_getNodes,
   action_getNodesSuccess,
   action_getStartNode,
   action_getStartNodeSuccess,
-  action_getUserCase,
-  action_isCreateUser,
-  action_selectLawcase,
-  action_selectStartAccount,
+  action_getUserCase, action_selectLawcase,
+  action_selectStartAccount
 } from '../app-state/app.action';
-import { MatIconRegistry } from '@angular/material/icon';
-import { DomSanitizer } from '@angular/platform-browser';
+import {
+  selector_lawcases,
+  selector_selectedStartAccount,
+  selector_startAccounts,
+  selector_user
+} from '../app-state/app.selector';
 import {
   Lawcase,
   LOCALSTORAGE_ALL_CASE,
@@ -51,13 +44,10 @@ import {
   LOCALSTORAGE_START_NODE_KEY_PRE,
   StartNode,
   TableName,
-  User,
+  User
 } from '../app-state/types';
-import { STYLE_FIRST_LETTER, STYLE_NORMAL } from 'pinyin';
-import * as pinyin from 'pinyin';
-import * as moment from 'moment';
+import { ServerConfig } from '../server.config';
 import { MessageService } from '../service/message.service';
-import { AddRecordComponent } from '../add-record/add-record.component';
 
 import { ReportService } from '../service/report.service';
 import { ReportCreate } from '../service/reportCreate';
@@ -164,7 +154,6 @@ export class RecordsComponent {
     const localCase = this.localStorage.getObject(LOCALSTORAGE_ALL_CASE);
     if (localCase && localCase.length > 0) {
       this.setAllCase(localCase);
-      this.getLawcase()
     }
     this.getLawcase();
 
@@ -383,8 +372,9 @@ export class RecordsComponent {
     startNode.level = 0;
     startNode.tradeTimes.push(moment(item.tradeTime));
     startNode.ids.push(item.id);
-    startNode.moneys.push(parseFloat(item.money));
+    startNode.moneys.push(item.money);
     startNode.commonQueryDuration = parseInt(item.commonQueryDuration);
+    startNode.isShowChild = true;
     // startNode.remark = item.remark;
     return startNode;
   }

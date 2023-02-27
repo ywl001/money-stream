@@ -1,7 +1,6 @@
 import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
 import { createReducer, on } from '@ngrx/store';
 import copy from 'fast-copy';
-import state from 'sweetalert/typings/modules/state';
 import { AccountNode } from './accountNode';
 import {
   action_changeNodesLayout,
@@ -28,21 +27,15 @@ import {
   action_selectLawcase,
   action_selectNode,
   action_selectStartAccount,
-  action_udateAccountInfoSuccess,
-  action_updateAccountInfo,
-  action_updateLawcaseSuccess,
-  action_updateNodeSuccess,
-  action_updatePersonSuccess,
-  action_updateStartNodeSuccess,
+  action_udateAccountInfoSuccess, action_updateLawcaseSuccess,
+  action_updateNodeSuccess, action_updateStartNodeSuccess
 } from './app.action';
 import {
   // AccountExtension,
   AccountInfo,
-  Lawcase,
-  Person,
-  StartNode,
+  Lawcase, StartNode,
   TradeRecord,
-  User,
+  User
 } from './types';
 
 export interface LawcaseState extends EntityState<Lawcase> {

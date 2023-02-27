@@ -17,12 +17,13 @@ export class LoadingInterceptor implements HttpInterceptor {
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     this.totalRequests++;
-    console.log('lanjiele ............')
+    // console.log('lanjiele ............')
     this.message.isShowBusyIcon(true)
 
     return next.handle(request).pipe(
       finalize(() => {
         this.totalRequests--;
+        console.log(this.totalRequests)
         if (this.totalRequests == 0) {
           this.message.isShowBusyIcon(false)
         }

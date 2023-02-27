@@ -1,45 +1,41 @@
 import {
-  Component,
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
+  ChangeDetectorRef, Component
 } from '@angular/core';
 
-import { MessageService } from './service/message.service';
 import { MatDialog } from '@angular/material/dialog';
 import { LawCaseComponent } from './law_case/law-case.component';
+import { MessageService } from './service/message.service';
 
 import { Observable } from 'rxjs';
 import { filter, take } from 'rxjs/operators';
+import * as toastr from 'toastr';
 
 import anime from 'animejs/lib/anime.es.js';
-import { LocalStorgeService } from './service/local-storge.service';
-import { QueryAccountComponent } from './query-account/query-account.component';
 import { environment } from 'src/environments/environment';
+import { QueryAccountComponent } from './query-account/query-account.component';
+import { LocalStorgeService } from './service/local-storge.service';
 
 
 import { Store } from '@ngrx/store';
-import {
-  selector_accountRecord,
-  selector_countInfo,
-  selector_selectedLawcase,
-  selector_selectedNode,
-  selector_user,
-} from './app-state/app.selector';
-import { DataGridComponent } from './data-grid/data-grid.component';
-import { concatLatestFrom } from '@ngrx/effects';
+import swal from 'sweetalert';
 import {
   action_changeNodesLayout,
   action_getConfig,
   action_getCountInfo,
   action_loginFailure,
   action_loginSuccess,
-  action_refreshNodes,
+  action_refreshNodes
 } from './app-state/app.action';
-import { LoginComponent } from './login/login.component';
-import swal from 'sweetalert';
-import { HttpClient } from '@angular/common/http';
-import { CountInfoComponent } from './count-info/count-info.component';
+import {
+  selector_countInfo, selector_user
+} from './app-state/app.selector';
+import { PhpFunctionName } from './app-state/phpFunctionName';
 import { CaseState } from './app-state/types';
+import { CountInfoComponent } from './count-info/count-info.component';
+import { LoginComponent } from './login/login.component';
+import { SqlService } from './service/sql.service';
+import { WorkTipsComponent } from './work-tips/work-tips.component';
 
 @Component({
   selector: 'app-root',
@@ -62,6 +58,7 @@ export class AppComponent {
     private store: Store,
     private cdr: ChangeDetectorRef,
     private local: LocalStorgeService,
+    private sql:SqlService
   ) {
     console.log(environment.aaa);
   }
@@ -90,6 +87,7 @@ export class AppComponent {
     });
 
     this.messageService.isShowBusyIcon$.subscribe(res=>{
+      // console.log('is show busy icon',res)
       this.isShowBusyIcon = res
     })
 
@@ -180,6 +178,27 @@ export class AppComponent {
   //查询账号或人员属于哪个案件
   onQueryAccount() {
     this.dialog.open(QueryAccountComponent);
+  }
+
+  onGetWorkTips(){
+    this.store.select(selector_user).pipe(take(1)).subscribe(user=>{
+      if(user){
+        console.log(user)
+        this.sql.exec(PhpFunctionName.SELECT_WORK_TIPS,user.id).subscribe(res=>{
+          if(res?.length > 0){
+            console.log(res)
+            let dialogRef = this.dialog.open(WorkTipsComponent, {
+              width: window.innerWidth + 'px',
+              height: window.innerHeight + 'px',
+            });
+            dialogRef.componentInstance.data = res;
+          }else{
+            toastr.info('没有待反馈账号')
+          }
+        })
+      }
+    })
+    
   }
 
   onLogin() {

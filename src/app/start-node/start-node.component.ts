@@ -59,7 +59,7 @@ export class StartNodeComponent implements OnInit {
       this.account = value.account;
       this.accountName = value.accountName;
       this.tradeTime = moment(value.tradeTime);
-      this.money = parseFloat(value.money);
+      this.money = value.money;
       this.commonQueryTime = parseInt(value.commonQueryDuration);
       this.id = value.id;
     }
@@ -92,7 +92,7 @@ export class StartNodeComponent implements OnInit {
     const o: StartNode = {
       accountName: this.accountName,
       account: this.account,
-      money: this.money + '',
+      money: this.money,
       tradeTime: this.tradeTime.format('YYYY-MM-DD HH:mm:ss'),
       commonQueryDuration: this.commonQueryTime + '',
       userID: userId

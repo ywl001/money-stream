@@ -57,8 +57,7 @@
               "src/styles.scss",
               "./node_modules/toastr/build/toastr.css",
               "src/assets/alertify.core.css",
-              "src/assets/alertify.default.css",
-              "node_modules/pure-css-loader/dist/css-loader.css"
+              "src/assets/alertify.default.css"
             ],
             "scripts": [
               "./node_modules/circular-json/build/circular-json.js"
@@ -75,7 +74,7 @@
                 {
                   "type": "anyComponentStyle",
                   "maximumWarning": "2kb",
-                  "maximumError": "4kb"
+                  "maximumError": "10kb"
                 }
               ],
               "fileReplacements": [

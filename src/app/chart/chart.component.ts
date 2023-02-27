@@ -11,6 +11,7 @@ import {
 import { MessageService } from '../service/message.service';
 import { NodeComponent } from '../node/node.component';
 import { AccountNode } from '../app-state/accountNode';
+import copy from 'fast-copy';
 
 import domtoimage from 'dom-to-image';
 import * as download from 'downloadjs';
@@ -59,9 +60,9 @@ export class ChartComponent implements OnInit {
 
   position;
 
-  private isSetPosition:boolean;
+  private isSetPosition: boolean;
 
-  private prevNodeLength:number= 0;
+  private prevNodeLength: number = 0;
 
   @ViewChild('chartDiv', { static: false, read: ViewContainerRef })
   chartDiv: ViewContainerRef;
@@ -72,8 +73,8 @@ export class ChartComponent implements OnInit {
     private store: Store,
     private resolver: ComponentFactoryResolver,
     private cdr: ChangeDetectorRef,
-    private local:LocalStorgeService
-  ) {}
+    private local: LocalStorgeService
+  ) { }
 
   ngOnInit() {
     console.log('chart init');
@@ -103,7 +104,10 @@ export class ChartComponent implements OnInit {
 
     this.store.select(selector_nodes).subscribe((nodes) => {
       if (!nodes || nodes.length == 0) return;
-      this.showNodes(nodes);
+
+      console.log('relayout chart',nodes)
+
+      this.showNodes(copy(nodes));
     });
   }
 
@@ -115,7 +119,7 @@ export class ChartComponent implements OnInit {
 
   private showNodes(nodes) {
     console.log('show nodes')
-    if(this.prevNodeLength==0){
+    if (this.prevNodeLength == 0) {
       this.prevNodeLength = nodes.length;
     }
 
@@ -153,6 +157,8 @@ export class ChartComponent implements OnInit {
   private processData(nodes: AccountNode[]) {
     this.nodeViews = [];
     this.accountMap = new Map();
+    nodes = this.filterData(nodes);
+    console.log('chart after filter nodes is', nodes)
     const sortNodes = this.sortNodes(nodes);
     sortNodes.forEach((node) => {
       const nodeView = this.createAccountView(node);
@@ -180,11 +186,64 @@ export class ChartComponent implements OnInit {
     return account;
   }
 
+  private filterData(nodes: Array<AccountNode>) {
+    // nodes.forEach(node => {
+    //   if (!node.isShowChild) {
+    //     this.clearChildNodeByNode(node, nodes)
+    //   }
+    // })
+
+    for (let i = 0; i < nodes.length; i++) {
+      const node = nodes[i];
+      if (!node.isFirstNode && !node.isShowChild) {
+        this.clearChildNodeByNode(node, nodes)
+      }
+    }
+    return nodes;
+  }
+
+  /**清除该节点及子节点
+ * node:父节点
+ * nodes:所有节点
+ * isDelSelf:是否清除父节点
+ */
+  private clearChildNodeByNode(
+    node: AccountNode,
+    nodes: AccountNode[],
+    isDelSelf: boolean = false
+  ) {
+    if (node) {
+      let children = this.getNodeAllChild(node);
+      if (isDelSelf) children.push(node);
+      children.forEach((c) => {
+        const i = nodes.findIndex((node) => node.id == c.id);
+        if (i >= 0) {
+          //记得要删除recordMap中的id，否则在重新设置查询时间时会造成id存在，不继续查询,
+          //对账户合并要删除ids中的所以id
+          nodes.splice(i, 1);
+        }
+      });
+    }
+  }
+
+  //获取节点下所有子节点，不包括节点本身
+  private getNodeAllChild(
+    node: AccountNode,
+    children: Array<AccountNode> = []
+  ) {
+    const childs = node.children;
+    childs.forEach((node) => {
+      this.getNodeAllChild(node, children);
+      children.push(node);
+    });
+    return children;
+  }
+
+
   //对传递过来的节点排序
   private sortNodes(nodes: Array<AccountNode>) {
     let newNodes = [];
     newNodes.push(nodes.find((node) => node.level === 0));
-
     for (let i = 0; i < newNodes.length; i++) {
       let parent = newNodes[i];
       for (let j = 0; j < nodes.length; j++) {
@@ -212,9 +271,9 @@ export class ChartComponent implements OnInit {
   private clear() {
     console.log('clear');
     //拖动回复到初始位置
-    if(this.isSetPosition)
-      this.position = {x:0,y:0};
-  
+    if (this.isSetPosition)
+      this.position = { x: 0, y: 0 };
+
     this.chartDiv.clear();
     const context = this.bgCanvas.nativeElement.getContext('2d');
     this.bgCanvas.nativeElement.width = this.bgCanvas.nativeElement.height = 0;
@@ -234,7 +293,7 @@ export class ChartComponent implements OnInit {
     console.log('chart destory')
   }
 
-  dragEnd(e){
+  dragEnd(e) {
     console.log('aaaaaa')
     console.log(e.source)
   }
@@ -499,11 +558,11 @@ export class ChartComponent implements OnInit {
   }
 
   private saveImage() {
-    let lawcase:Lawcase;
+    let lawcase: Lawcase;
     this.store.select(selector_selectedLawcase).subscribe((lc) => {
       lawcase = lc;
     });
-    if(!lawcase) return;
+    if (!lawcase) return;
     domtoimage
       .toPng(document.getElementById('root'), { bgcolor: 'white' })
       .then((dataUrl) => {

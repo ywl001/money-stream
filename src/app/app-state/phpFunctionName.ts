@@ -37,6 +37,7 @@ export class PhpFunctionName {
   static SELECT_LAWCASE_BY_KEYWORD = 'selectCaseByKeyword';
   
   static SELECT_COUNT_INFO = 'selectCountInfo';
+  static SELECT_PERSON_INFO = 'selectPersonInfo';
 
   static SELECT_CASE_BY_NUMBER = 'selectCaseByCaseNumber';
   static SELECT_CASE_BY_ID = 'selectCaseByCaseID';
@@ -51,6 +52,13 @@ export class PhpFunctionName {
   static SELECT_ACCOUNT_LIUSHUI_COUNT = 'selectLiushuiCount';
 
   static SELECT_ACCOUNT_INFO_BY_ACCOUNT = 'selectAccountInfoByAccont';
+
+  /**
+   * 选择待反馈记录，带userid
+   */
+  static SELECT_WORK_TIPS = 'selectWorkTips';
+
+
 
   /**
    * 查询账号有关联案件或取现的记录，带account参数

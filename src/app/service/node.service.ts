@@ -26,12 +26,15 @@ import {
 } from '../app-state/app.selector';
 
 import { action_getAccountInfo, action_updateStartNodeSuccess } from '../app-state/app.action';
+import { FilterComponent } from '../filter/filter.component';
+
 // import { action_getAccountExtension } from '../app-state/app.action';
 
 @Injectable({
   providedIn: 'root',
 })
 export class NodeService {
+
   private caseID: string;
 
   nodes: Array<AccountNode> = [];
@@ -49,7 +52,8 @@ export class NodeService {
 
   private isSaveToLocal: boolean = true;
 
-  recordMap:Map<string,TradeRecord> = new Map();
+  /**防止死循环map */
+  recordMap: Map<string, TradeRecord> = new Map();
 
   constructor(
     private sqlService: SqlService,
@@ -182,6 +186,7 @@ export class NodeService {
   /**解析查询数据 */
   private processData(res: TradeRecord[]) {
     // console.timeEnd('query')
+    console.log('process data ,data is', res)
     if (res && res.length > 0) {
       let nodeMap = new Map();
       for (let i = 0; i < res.length; i++) {
@@ -190,10 +195,11 @@ export class NodeService {
         if (this.isFilter(this.nodeFilter, item)) continue;
 
         //检查node在节点中的唯一性
-        if(this.recordMap.has(item.id)){
+        if (this.recordMap.has(item.id)) {
+          console.log('record map has exists')
           continue;
-        }else{
-          this.recordMap.set(item.id,item)
+        } else {
+          this.recordMap.set(item.id, null)
         }
 
         let node: AccountNode;
@@ -221,20 +227,19 @@ export class NodeService {
     this.nextAccount();
   }
 
+  /**查看过滤信息 */
   private isFilter(filter: string, item: TradeRecord): boolean {
-    let result: boolean = false;
     if (filter) {
       const filterData = JSON.parse(filter);
       const keys = Object.keys(filterData);
-
-
       for (let i = 0; i < keys.length; i++) {
         const key = keys[i];
-        if (key === 'money') {
+        if (key === FilterComponent.KEY_MONEY) {
+          console.log('filter by money', item[key], Math.abs(item[key]) < filterData[key])
           return Math.abs(item[key]) < filterData[key];
         }
 
-        if (key == 'keepAccount') {
+        if (key == FilterComponent.KEY_KEEP_ACCOUNT) {
           const keepAccounts = filterData[key];
 
           if (Array.isArray(keepAccounts)) {
@@ -248,20 +253,20 @@ export class NodeService {
           }
         }
 
-        if (key == 'perventAccount') {
-          const keepAccounts = filterData[key];
+        if (key == FilterComponent.KEY_PREVENT_ACCOUNT) {
+          const perventAccount = filterData[key];
 
-          if (Array.isArray(keepAccounts)) {
-            for (let i = 0; i < keepAccounts.length; i++) {
-              const filterAccount = keepAccounts[i];
+          if (Array.isArray(perventAccount)) {
+            for (let i = 0; i < perventAccount.length; i++) {
+              const filterAccount = perventAccount[i];
               if (item.oppositeAccount == filterAccount || item.oppositeBankNumber == filterAccount) {
+                console.log('filter perventAccount')
                 return true
               }
             }
             return false;
           }
         }
-
       }
     }
     return false;
@@ -288,6 +293,7 @@ export class NodeService {
     node.tradeTimes.push(moment(item['tradeTime']));
     node.leftMoneys.push(parseFloat(item['leftMoney']));
     node.tradeNumbers.push(item['tradeNumber']);
+    node.isShowChild = item['isShowChild'] == 1;
     return node;
   }
 
@@ -308,6 +314,7 @@ export class NodeService {
       this.queryNode(this.waitQueryAccounts[0]);
     } else {
       //查询完毕了。。。
+      console.log('query complete ,record map is ', this.recordMap)
       let str = this.nodes
         .map((node) => `'${this.getQueryAccount(node)}'`)
         .filter(a => a && a.length > 0)
@@ -412,12 +419,14 @@ export class NodeService {
   /////////////////////////////////////////////////////////////////////////////////////////////////////
   /**重新查询节点 */
   private reQueryNode(node: AccountNode, nodes: AccountNode[]) {
+    // this.recordMap = new Map()
     // 1、清除该节点及其子节点
-    this.clearChildNode(node, nodes);
+    this.clearChildNodeByNode(node, nodes);
     //2、把该节点加入到待查数组中
     //注意要清除node中的children中的儿子对象
     node.children = [];
     this.waitQueryAccounts.push(node);
+    console.log('after clear,query node is', node)
     //4、查询
     this.queryNode(node);
   }
@@ -426,7 +435,7 @@ export class NodeService {
   queryDurationChange(value) {
     //根据更新的id，找到更新的节点
     let node = this.nodes.find((n) => n.id == value.id);
-    console.log('after query duration change', value, node)
+    console.log('after query duration change', node.queryDuration)
     // if (node.isFirstNode) {
     //   console.log('frist node change duration')
     //   this.store.dispatch(action_updateStartNodeSuccess({ data: { id: value.id, changes: value.tableData } }))
@@ -444,7 +453,7 @@ export class NodeService {
   /**删除节点 */
   delNode(id: string) {
     const node = this.nodes.find((n) => n.id == id);
-    this.clearChildNode(node, this.nodes, true);
+    this.clearChildNodeByNode(node, this.nodes, true);
     this.saveDataToLocal();
     return of(this.nodes);
   }
@@ -483,19 +492,32 @@ export class NodeService {
    * nodes:所有节点
    * isDelSelf:是否清除父节点
    */
-  private clearChildNode(
+  private clearChildNodeByNode(
     node: AccountNode,
     nodes: AccountNode[],
     isDelSelf: boolean = false
   ) {
     if (node) {
+      console.log('before clear nodes is ', nodes)
+      console.log('before clear recordMap is ', this.recordMap)
       let children = this.getNodeAllChild(node);
+      console.log('clear child node ,child nodes is,', children)
       if (isDelSelf) children.push(node);
       children.forEach((c) => {
         const i = nodes.findIndex((node) => node.id == c.id);
-        nodes.splice(i, 1);
+        if (i >= 0) {
+          //记得要删除recordMap中的id，否则在重新设置查询时间时会造成id存在，不继续查询,
+          //对账户合并要删除ids中的所以id
+          const ids = nodes[i].ids;
+          ids.forEach(id=>{
+            this.recordMap.delete(id);
+          })
+          console.log('record map is ', this.recordMap)
+          nodes.splice(i, 1);
+        }
       });
-      // console.log(nodes);
+      console.log('after clear child node, nodes is ', nodes)
+      console.log('after clear child node, record map is ', this.recordMap)
     }
   }
 
@@ -503,7 +525,7 @@ export class NodeService {
   private saveDataToLocal() {
     if (this.isSaveToLocal && this.startAccount) {
       const key = `${LOCALSTORAGE_NODE_KEY_PRE}${this.startAccount.id}`;
-      console.log('firstnode', this.startAccount);
+      console.log('save to local firstnode', this.startAccount);
       this.localService.setNode(key, this.nodes);
     }
   }

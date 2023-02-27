@@ -7,7 +7,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
 import { ResizedEvent } from 'angular-resize-event';
 import copy from 'fast-copy';
-import { filter, map, skip, take } from 'rxjs';
+import { take } from 'rxjs';
 import swal from 'sweetalert';
 import * as toastr from 'toastr';
 import { AccountComponent } from '../account/account.component';
@@ -15,30 +15,28 @@ import { AddRecordComponent } from '../add-record/add-record.component';
 import { AccountNode } from '../app-state/accountNode';
 import {
   action_delNode,
-  action_downloadNodeRaw, action_getAccountRelationRecord, action_getAccountRelationRecordSuccess,
-  action_selectNode,
+  action_downloadNodeRaw, action_refreshNodes, action_selectNode,
   action_updateNodeSuccess
 } from '../app-state/app.action';
 import {
-  selector_isCreateUser,
-  // selector_persons,
-  selector_relationRecords,
-  selector_selectedLawcase,
-  selector_selectedNodeId
+  selector_isCreateUser, selector_layoutType, selector_selectedLawcase,
+  selector_selectedLawcaseId,
+  selector_selectedNodeId,
+  selector_user
 } from '../app-state/app.selector';
 import { PhpFunctionName } from '../app-state/phpFunctionName';
-import { AccountInfo, Lawcase, Person, TableName, TradeRecord } from '../app-state/types';
+import { Person, TableName, TradeRecord } from '../app-state/types';
 import { ChangeDurationComponent } from '../change-duration/change-duration.component';
 import { DataGridComponent } from '../data-grid/data-grid.component';
 import { FilterComponent } from '../filter/filter.component';
 import { LowerNodeComponent } from '../lower-node/lower-node.component';
 import { AccountDetailComponent } from '../node-detail/account-detail.component';
-import { PersonComponent, PersonState } from '../person/person.component';
-import { RemarkComponent } from '../remark/remark.component';
+import { PersonComponent } from '../person/person.component';
 import { ServerConfig } from '../server.config';
 import { MessageService } from '../service/message.service';
 import { SqlService } from '../service/sql.service';
 import { UploadAttachmentComponent } from '../upload-attachment/upload-attachment.component';
+import anime from 'animejs/lib/anime.es.js';
 
 @Component({
   selector: 'app-node',
@@ -104,10 +102,17 @@ export class NodeComponent implements OnInit {
 
   isLuodi_person: boolean;
   isDaji_person: boolean;
+  isQuanzhanghu: boolean;
 
   moneyRecord: TradeRecord[];
 
   person: Person;
+
+  btnFoldRotate: string;
+
+  isLandspace: boolean;
+
+  isShowBtnFold: boolean = false;
 
   // personRemark: string;
 
@@ -142,7 +147,6 @@ export class NodeComponent implements OnInit {
     this._address = value;
   }
 
-  @Input()
   set data(value: AccountNode) {
     // console.log(value)
     this._data = value;
@@ -151,6 +155,10 @@ export class NodeComponent implements OnInit {
     if (value.person) {
       this.setPerson(value.person)
     }
+    if (this.isLandspace)
+      this.btnFoldRotate = value.isShowChild ? '-90deg' : '0deg'
+    else
+      this.btnFoldRotate = value.isShowChild ? '0deg' : '-90deg'
   }
 
   get data(): AccountNode {
@@ -205,15 +213,15 @@ export class NodeComponent implements OnInit {
     return a;
   }
 
-  // get bgColor() {
-  //   // if (this.data.isFreeze) return 'url(assets/freeze.jpg)';
-  //   // if (this.data.isLowerNode) return 'lightGray';
-  //   // if (this.data.accountInfo?.returnMoney > 0) return 'url(assets/money.jpg)'
-  //   // if (this.data.accountInfo?.isFreeze == 1) return 'url(assets/freeze.jpg)';
-  //   // if (this.isOutCash(this.data.accountInfo)) return 'orange';
-  //   // if (this.data.accountInfo?.remark) return 'lightPink';
-  //   // return '#15d1af';
-  // }
+  get bgColor() {
+    if (this.data.accountInfo?.workTips > 0) return '#FFE081';
+    // if (this.data.isLowerNode) return 'lightGray';
+    // if (this.data.accountInfo?.returnMoney > 0) return 'url(assets/money.jpg)'
+    // if (this.data.accountInfo?.isFreeze == 1) return 'url(assets/freeze.jpg)';
+    // if (this.isOutCash(this.data.accountInfo)) return 'orange';
+    // if (this.data.accountInfo?.remark) return 'lightPink';
+    return '#d5f3f4';
+  }
 
   get quxianTooltip() {
     let cash = 0;
@@ -289,6 +297,8 @@ export class NodeComponent implements OnInit {
     return this.data.oppositeAccount || this.data.oppositeBankNumber;
   }
 
+  private caseID: string;
+  private userID: string;
   ngOnInit() {
     this.store.select(selector_selectedNodeId).subscribe((id) => {
       this.isSelected = this.data.id === id ? true : false;
@@ -296,37 +306,55 @@ export class NodeComponent implements OnInit {
       this.cdr.markForCheck();
     });
 
-    // this.store.select(selector_persons).subscribe((persons) => {
-    //   if (!persons) return;
-    //   const p = persons.find((p1) => p1.id == this.data.personID);
-    //   if (p) {
-    //     this.personName = p.name;
-    //     const time = new Date().getTime();
-    //     if (p.photoUrl) {
-    //       this.photoUrl = ServerConfig.photoPath + p.photoUrl;
-    //     }
-    //     this.address = p.address;
-    //     this.isLuodi_person = p.isLuodi == 1;
-    //     this.isDaji_person = p.isDaji == 1
-    //     this.cdr.markForCheck();
-    //   }
-    // });
+    this.store.select(selector_selectedLawcaseId).subscribe(id => {
+      this.caseID = id;
+    })
+
+    this.store.select(selector_user).subscribe(user => {
+      this.userID = user?.id;
+    })
+
+    this.store.select(selector_layoutType).subscribe(res => {
+      this.isLandspace = res;
+      this.isShowBtnFold = !this.data.isShowChild
+      if (this.isLandspace)
+        this.btnFoldRotate = this.data.isShowChild ? '-90deg' : '0deg'
+      else
+        this.btnFoldRotate = this.data.isShowChild ? '0deg' : '-90deg'
+    })
   }
 
-  private setPerson(p) {
+  get btnFoldClass() {
+    if (!this.isLandspace) {
+      return 'btn-fold-v'
+    }
+    return 'btn-fold-h'
+  }
+
+  private setPerson(p: Person) {
     this.personName = p.name;
     if (p.photoUrl) {
       this.photoUrl = ServerConfig.photoPath + p.photoUrl;
     }
     this.address = p.address;
     this.isLuodi_person = p.isLuodi == 1;
-    this.isDaji_person = p.isDaji == 1
+    this.isDaji_person = p.isDaji == 1;
+    this.isQuanzhanghu = p.workTips == 1;
     this.cdr.markForCheck();
   }
 
   ngAfterViewInit() {
     this.h = this.rootDiv.nativeElement.clientHeight;
     this.w = this.rootDiv.nativeElement.clientWidth;
+
+    // tippy(this.rootDiv.nativeElement,{
+    //   content:'aaaaaaaaa',
+    //   arrow:true,
+    //   showOnCreate:true,
+    //   placement:'right-start',
+    //   trigger:'manual',
+    //   offset:[-20,0]
+    // })
   }
 
   onResized(event: ResizedEvent) {
@@ -373,23 +401,26 @@ export class NodeComponent implements OnInit {
     }
   }
 
-  // onMouseOver() {
-  //   // console.log('mouse over')
-  //   if (this.data.accountInfo?.remark) {
-  //     this.btnShowRemarkVisible = true;
-  //   }
-  // }
-
-  // onMouseOut() {
-  //   // console.log('mouse out')
-  //   this.btnShowRemarkVisible = false;
-  // }
-
-  showRemark() {
-    // console.log('show remark')
-    let dialogRef = this.dialog.open(RemarkComponent);
-    dialogRef.componentInstance.data = this.data;
+  btnWorkTips
+  onMouseEnter() {
+    console.log('mouse over')
+    this.btnWorkTips = true;
+    this.isShowBtnFold = true;
   }
+
+  onMouseLeave() {
+    console.log('mouse out')
+    this.btnWorkTips = false;
+    this.isShowBtnFold = !this.data.isShowChild;
+  }
+
+  // showRemark() {
+  //   // console.log('show remark')
+  //   // let dialogRef = this.dialog.open(RemarkComponent);
+  //   // dialogRef.componentInstance.data = this.data;
+
+
+  // }
 
   onDeleteNode() {
     swal('确定要删除该节点吗？', {
@@ -470,7 +501,49 @@ export class NodeComponent implements OnInit {
     });
   }
 
-  onSetFreeze() {
+  onMarkTips() {
+    if (this.data.accountInfo) {
+      const workTips = this.data.accountInfo.workTips;
+      const tableData = {
+        workTips: workTips == 1 ? 0 : 1
+      }
+      const data = {
+        tableName: TableName.ACCOUNT_INFO,
+        tableData: tableData,
+        id: this.data.accountInfo.id
+      }
+      this.sql.exec(PhpFunctionName.UPDATE, data).subscribe(res => {
+        if (res) {
+          const acc = Object.assign({}, this.data.accountInfo, tableData);
+          this.store.dispatch(action_updateNodeSuccess({ data: { id: this.data.id, changes: { accountInfo: acc } } }))
+        } else {
+          toastr.error('更新失败')
+        }
+      })
+    } else {
+      let acc = this.data.oppositeBankNumber
+        ? this.data.oppositeBankNumber
+        : this.data.oppositeAccount;
+      const tableData = {
+        workTips: 1,
+        account: acc,
+        caseID: this.caseID,
+        userID: this.userID
+      }
+      const data = {
+        tableName: TableName.ACCOUNT_INFO,
+        tableData: tableData
+      }
+      console.log('insert worktips data', data)
+      this.sql.exec(PhpFunctionName.INSERT, data).subscribe(res => {
+        if (res && res.length > 0) {
+          this.store.dispatch(action_updateNodeSuccess({ data: { id: this.data.id, changes: { accountInfo: res[0] } } }))
+        } else {
+          toastr.error('更新失败')
+        }
+      })
+    }
+
     // let acc = this.data.oppositeBankNumber
     //   ? this.data.oppositeBankNumber
     //   : this.data.oppositeAccount;
@@ -494,6 +567,25 @@ export class NodeComponent implements OnInit {
     // } else {
     //   toastr.warning('账号不存在');
     // }
+  }
+
+  onMarkTips2(p: Person) {
+    const tableData = {
+      workTips: p.workTips == 1 ? 0 : 1
+    }
+    const data = {
+      tableName: TableName.PERSON,
+      tableData: tableData,
+      id: p.id
+    }
+
+    this.sql.exec(PhpFunctionName.UPDATE, data).subscribe(res => {
+      if (res) {
+        this.store.dispatch(action_refreshNodes())
+      } else {
+        toastr.error('更新失败')
+      }
+    })
   }
 
   /**设置节点的人员关联 */
@@ -520,6 +612,38 @@ export class NodeComponent implements OnInit {
       let dialogRef = this.dialog.open(AddRecordComponent, { disableClose: true });
       dialogRef.componentInstance.account = this.data.oppositeAccount;
       dialogRef.componentInstance.caseId = res.id;
+    })
+  }
+
+  // private isFold: boolean;
+
+  onClickBtnFold() {
+    // this.btnFoldRotate = this.data.isShowChild ? 0 : -90;
+    // anime({
+    //   targets: '.btn-fold',
+    //   rotate: this.btnFoldRotate,
+    //   duration: 500,
+    // });
+
+    const data = {
+      tableName: TableName.TRADE_RECORD,
+      tableData: {
+        isShowChild: this.data.isShowChild ? 0 : 1
+      },
+      id: this.data.id
+    }
+
+    this.sql.exec(PhpFunctionName.UPDATE, data).subscribe(res => {
+      if (res) {
+        this.store.dispatch(action_updateNodeSuccess({
+          data: {
+            id: this.data.id,
+            changes: {
+              isShowChild: !this.data.isShowChild
+            }
+          }
+        }))
+      }
     })
   }
 }

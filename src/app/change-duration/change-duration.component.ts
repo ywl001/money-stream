@@ -34,7 +34,6 @@ export class ChangeDurationComponent implements OnInit {
       this.day = this.hour = this.minute = 0;
     }else{
       this.day = Math.floor(value / (24 * 60));
-      console.log(this.day)
       this.hour = Math.floor((value - this.day * 24 * 60) / 60);
       this.minute = value - this.day * 24 * 60 - this.hour * 60;
     }

@@ -1,5 +1,4 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import state from 'sweetalert/typings/modules/state';
 import {
   lawcaseAdapter,
   LawcaseState,
@@ -7,9 +6,8 @@ import {
   NodeState,
   OtherDataState,
   startAccountAdapter,
-  StartAccountState,
+  StartAccountState
 } from './app.reducer';
-import { StartNode } from './types';
 
 export const selectLawcaseState =
   createFeatureSelector<LawcaseState>('lawcase');
@@ -164,7 +162,7 @@ export const selector_user = createSelector(
 export const selector_isCreateUser = createSelector(
   selector_selectedStartAccount,
   selector_user,
-  (acc,user)=>(acc?.userID == user?.id || user?.id=='1')
+  (acc,user)=>(acc?.userID == user?.id)
 );
 
 export const selector_countInfo = createSelector(

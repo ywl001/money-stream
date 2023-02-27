@@ -1,9 +1,15 @@
-<div #root id="root" [style.top.px]="y" [style.left.px]="x"  [class.selected]="isSelected"
-  (resized)="onResized($event)" (click)="onRootClick()">
-  <div class="img-container" *ngIf="data.person" (click)="onSetPerson()">
+<div #root id="root" [style.top.px]="y" [style.left.px]="x" [style.background]="bgColor" [class.selected]="isSelected"
+  (resized)="onResized($event)" (click)="onRootClick()" (mouseenter)="onMouseEnter()"
+  (mouseleave)="onMouseLeave()">
+  <div class="img-container" *ngIf="data.person" (click)="onSetPerson()" (mouseenter)="onMouseEnter()"
+    (mouseleave)="onMouseLeave()">
     <img class="photo" [src]="photoUrl" (error)="onImgError()" height="100px" />
-    <div *ngIf=isLuodi_person class="label luodi"></div>
-    <div *ngIf=isDaji_person class="label daji"></div>
+    <div class="tipIcon" *ngIf="btnWorkTips" (click)="onMarkTips2(data.person); $event.stopPropagation()"
+      matTooltip="待反馈" matTooltipPosition="above"></div>
+    <div *ngIf="isLuodi_person" class="label luodi"></div>
+    <div *ngIf="isDaji_person" class="label daji"></div>
+    <div *ngIf="isQuanzhanghu" class="label quanzhanghu"></div>
+
     <div class="personName">{{ personName }}</div>
   </div>
 
@@ -20,51 +26,60 @@
     <!-- <p *ngIf="data.remark" style="color: red">{{ data.remark }}</p> -->
     <p *ngIf="address">{{ address }}</p>
     <!-- <p *ngIf="personRemark" style="color: red">{{ personRemark }}</p> -->
-    <!-- <img *ngIf="btnShowRemarkVisible" src="assets/remark1.png" (click)="showRemark();$event.stopPropagation();" /> -->
+    <!-- <img class="bigimg" *ngIf="btnWorkTips" src="assets/remark1.png" (click)="showRemark();$event.stopPropagation();" /> -->
     <div class="image-container">
       <img src="assets/quxian.png" width="30px" height="30px" *ngIf="isQuxian" [matTooltip]="quxianTooltip">
       <img src="assets/fanxian.png" width="30px" height="30px" *ngIf="isFanxian" matTooltip="有返现">
       <img src="assets/beizhu.png" width="30px" height="30px" *ngIf="isHasRemark" [matTooltip]="remarkTooltip">
-      <img src="assets/lawcase.png" width="30px" height="30px" *ngIf="isHasRelationCase" [matTooltip]="relationCaseTooltip">
+      <img src="assets/lawcase.png" width="30px" height="30px" *ngIf="isHasRelationCase"
+        [matTooltip]="relationCaseTooltip">
     </div>
   </div>
 
-  <div class="btn-container" *ngIf="isCreateUser$|async">
-    <div *ngIf="!isFirstNode" class="btn btnDel" (click)="onDeleteNode()" matTooltip="删除节点" matTooltipPosition="above">
-    </div>
-
-    <div *ngIf="data.children.length == 0" class="btn btnConnect" (click)="onEditNodeAccount()" matTooltip="修改下级账号"
-      matTooltipPosition="above"></div>
-
-    <div class="btn_container2" *ngIf="isHasAccount">
-
-      <div class="btn btnAddRecord" (click)="onAddrecord()" matTooltip="手动添加交易记录" matTooltipPosition="above"></div>
-      <div class="btn btnRemark" (click)="onSetAccountInfo()" matTooltip="设置账户信息" matTooltipPosition="above"></div>
-      <div class="btn btnFilter" (click)="onFilterNode()" matTooltip="过滤下级账号" matTooltipPosition="above"></div>
-
-      <div class="btn btnDownload" (click)="onDownloadNode()" matTooltip="下载账号原数据" matTooltipPosition="above"></div>
-      <!-- <div class="btn btnAttachment" (click)="onUploadAttachment()" matTooltip="上传附件" matTooltipPosition="above"></div> -->
-
-      <!-- <div
-        class="btn btnConnect"
-        *ngIf="data.children.length == 0 && !data.isLowerAccount"
-        (click)="onAddLowerNode()"
-        matTooltip="添加下级节点"
-        matTooltipPosition="above"
-      ></div> -->
-
-      <!-- 添加过人员的和没有账号的不显示 -->
-      <div class="btn btnPerson" *ngIf="!data.person" (click)="onSetPerson()" matTooltip="关联人员"
+  <div class="btn-container">
+    <div class="btn btnDownload" (click)="onDownloadNode()" matTooltip="下载账号原数据" matTooltipPosition="above"></div>
+    <div class="btn-user" *ngIf="isCreateUser$|async">
+      <div *ngIf="!isFirstNode" class="btn btnDel" (click)="onDeleteNode()" matTooltip="删除节点"
+        matTooltipPosition="above">
+      </div>
+      <div *ngIf="data.children.length == 0" class="btn btnConnect" (click)="onEditNodeAccount()" matTooltip="修改下级账号"
         matTooltipPosition="above"></div>
+      <div class="btn-container-account" *ngIf="isHasAccount">
 
-      <!-- <div
-        class="btn btnFreeze"
-        (click)="onSetFreeze()"
-        matTooltip="设置冻结状态"
-        matTooltipPosition="above"
-      ></div> -->
+        <div class="btn btnWorkTips" (click)="onMarkTips()" matTooltip="标记待反馈" matTooltipPosition="above"></div>
 
-      <div class="btn btnDuration" (click)="onChangNodeDuration()" matTooltip="设置查询时长" matTooltipPosition="above"></div>
+        <div class="btn btnRemark" (click)="onSetAccountInfo()" matTooltip="设置账户信息" matTooltipPosition="above"></div>
+
+        <!-- <div class="btn btnAttachment" (click)="onUploadAttachment()" matTooltip="上传附件" matTooltipPosition="above"></div> -->
+
+        <!-- <div
+            class="btn btnConnect"
+            *ngIf="data.children.length == 0 && !data.isLowerAccount"
+            (click)="onAddLowerNode()"
+            matTooltip="添加下级节点"
+            matTooltipPosition="above"
+            ></div> -->
+
+        <!-- 添加过人员的和没有账号的不显示 -->
+        <div class="btn btnPerson" *ngIf="!data.person" (click)="onSetPerson()" matTooltip="关联人员"
+          matTooltipPosition="above"></div>
+
+        <!-- <div
+              class="btn btnFreeze"
+              (click)="onSetFreeze()"
+              matTooltip="设置冻结状态"
+              matTooltipPosition="above"
+              ></div> -->
+        <div class="btn btnAddRecord" (click)="onAddrecord()" matTooltip="手动添加交易记录" matTooltipPosition="above"></div>
+        <div class="btn btnFilter" (click)="onFilterNode()" matTooltip="过滤下级账号" matTooltipPosition="above"></div>
+        <div class="btn btnDuration" (click)="onChangNodeDuration()" matTooltip="设置查询时长" matTooltipPosition="above">
+        </div>
+      </div>
     </div>
   </div>
+
+  <!-- <div style="width: 100%;"></div> -->
+
+  <div [class]="btnFoldClass" *ngIf="data.children.length > 0 && isShowBtnFold && !isFirstNode" [style.rotate]="btnFoldRotate"
+    (click)="onClickBtnFold(); $event.stopPropagation()"></div>
 </div>

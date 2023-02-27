@@ -3,7 +3,7 @@
   height: 100%;
   display: flex;
   overflow: hidden;
-
+  justify-content: center;
   .leftContainer {
     width: 400px;
     height: 100%;
@@ -70,6 +70,12 @@
     &:hover {
       background-image: url('../assets/open.png');
     }
+  }
+
+  .spinner{
+    position:absolute;
+    align-self: center;
+    justify-self: center;
   }
 
   .welcome {

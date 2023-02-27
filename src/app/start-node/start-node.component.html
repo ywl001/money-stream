@@ -1,19 +1,19 @@
 <div class="root">
   <mat-form-field>
     <mat-label>起始账号：</mat-label>
-    <input [(ngModel)]="account" matInput autocomplete="off" />
+    <input [(ngModel)]="account" matInput autocomplete="off" del-whitespace/>
   </mat-form-field>
 
   <div class="userName">
     <mat-form-field>
       <mat-label>账号姓名：</mat-label>
-      <input [(ngModel)]="accountName" matInput autocomplete="off" />
+      <input [(ngModel)]="accountName" matInput autocomplete="off" del-whitespace/>
     </mat-form-field>
   </div>
 
   <mat-form-field>
     <input matInput [ngxMatDatetimePicker]="picker" placeholder="转账时间" [(ngModel)]="tradeTime"
-      (input)="onTradeTimeInputChange($event)" autocomplete="off" />
+      (input)="onTradeTimeInputChange($event)" autocomplete="off"/>
     <mat-datepicker-toggle matSuffix [for]="$any(picker)"></mat-datepicker-toggle>
     <ngx-mat-datetime-picker #picker [showSeconds]="true">
     </ngx-mat-datetime-picker>
@@ -24,7 +24,7 @@
 
   <mat-form-field>
     <mat-label>转账金额：</mat-label>
-    <input [(ngModel)]="money" matInput />
+    <input [(ngModel)]="money" matInput del-whitespace/>
   </mat-form-field>
 
   <div style="

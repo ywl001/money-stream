@@ -1,0 +1,41 @@
+<div class="btn-container">
+    <div class="btn btnDownload" (click)="onDownloadNode()" matTooltip="下载账号原数据" matTooltipPosition="above"></div>
+    <div class="btn-container2" *ngIf="isCreateUser$|async">
+      <div *ngIf="!isFirstNode" class="btn btnDel" (click)="onDeleteNode()" matTooltip="删除节点"
+        matTooltipPosition="above">
+      </div>
+      <div *ngIf="data.children.length == 0" class="btn btnConnect" (click)="onEditNodeAccount()" matTooltip="修改下级账号"
+        matTooltipPosition="above"></div>
+      <div class="btn-container2" *ngIf="isHasAccount">
+
+        <div class="btn btnWorkTips" (click)="onMarkTips()" matTooltip="标记待反馈" matTooltipPosition="above"></div>
+
+        <div class="btn btnRemark" (click)="onSetAccountInfo()" matTooltip="设置账户信息" matTooltipPosition="above"></div>
+
+        <!-- <div class="btn btnAttachment" (click)="onUploadAttachment()" matTooltip="上传附件" matTooltipPosition="above"></div> -->
+
+        <!-- <div
+            class="btn btnConnect"
+            *ngIf="data.children.length == 0 && !data.isLowerAccount"
+            (click)="onAddLowerNode()"
+            matTooltip="添加下级节点"
+            matTooltipPosition="above"
+            ></div> -->
+
+        <!-- 添加过人员的和没有账号的不显示 -->
+        <div class="btn btnPerson" *ngIf="!data.person" (click)="onSetPerson()" matTooltip="关联人员"
+          matTooltipPosition="above"></div>
+
+        <!-- <div
+              class="btn btnFreeze"
+              (click)="onSetFreeze()"
+              matTooltip="设置冻结状态"
+              matTooltipPosition="above"
+              ></div> -->
+        <div class="btn btnAddRecord" (click)="onAddrecord()" matTooltip="手动添加交易记录" matTooltipPosition="above"></div>
+        <div class="btn btnFilter" (click)="onFilterNode()" matTooltip="过滤下级账号" matTooltipPosition="above"></div>
+        <div class="btn btnDuration" (click)="onChangNodeDuration()" matTooltip="设置查询时长" matTooltipPosition="above">
+        </div>
+      </div>
+    </div>
+  </div>

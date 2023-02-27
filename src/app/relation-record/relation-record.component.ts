@@ -1,14 +1,18 @@
 
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Subscription, take } from 'rxjs';
-import { action_relationRecord } from '../app-state/app.action';
-import { selector_isCreateUser, selector_selectedLawcase, selector_selectedLawcaseId } from '../app-state/app.selector';
+import * as toastr from 'toastr';
+import { AccountNode } from '../app-state/accountNode';
+import { action_insertStartNodeSuccess, action_refreshNodes, action_relationRecord, action_relationRecordSuccess } from '../app-state/app.action';
+import { selector_isCreateUser, selector_selectedLawcase, selector_selectedLawcaseId, selector_user } from '../app-state/app.selector';
 import { PhpFunctionName } from '../app-state/phpFunctionName';
-import { CaseState, Lawcase, SqlData, TableName, TradeRecord } from '../app-state/types';
+import { CaseState, Lawcase, SqlData, StartNode, TableName, TradeRecord } from '../app-state/types';
 import { MessageService } from '../service/message.service';
 import { SqlService } from '../service/sql.service';
-import * as toastr from 'toastr';
+import * as moment from 'moment';
+import { MatDialogRef } from '@angular/material/dialog';
+import { DataGridComponent } from '../data-grid/data-grid.component';
 
 
 @Component({
@@ -16,11 +20,13 @@ import * as toastr from 'toastr';
   templateUrl: './relation-record.component.html',
   styleUrls: ['./relation-record.component.scss']
 })
-export class AddRecordCaseComponent implements OnInit {
+export class RelationRecordComponent implements OnInit {
 
   lawcaseState: CaseState = CaseState.RELATION;
   currentCase: Lawcase;
   recordId: string;
+
+  parentDialogRef: MatDialogRef<DataGridComponent>;
 
   /**
    * 是否已经关联了案件
@@ -58,7 +64,10 @@ export class AddRecordCaseComponent implements OnInit {
    */
   markMoney: number;
 
-  isNextNode:number;
+  isNextNode: number;
+
+  private caseID: string;
+  private userID: string;
 
 
 
@@ -66,17 +75,21 @@ export class AddRecordCaseComponent implements OnInit {
 
   private selectCaseComplete: Subscription;
 
-  constructor(private store: Store, private message: MessageService, private sql: SqlService, private cdr: ChangeDetectorRef) { }
+  constructor(private store: Store,
+    private message: MessageService,
+    private sql: SqlService,
+    private cdr: ChangeDetectorRef) {
+  }
 
   set data(value: TradeRecord) {
     this._data = value;
-    console.log('relation record set data',value)
+    console.log('relation record set data', value)
     this.recordId = value.id;
     this.isOutRecord = value.inOrOut == '借'
     this.isInRecord = value.inOrOut == '贷'
     this.isRelationedCase = parseInt(value.relationCaseID) > 0;
     this.markMoney = Boolean(value.markMoney) ? value.markMoney : 0;
-    console.log('mark money',this.markMoney)
+    console.log('mark money', this.markMoney)
     this.isNextNode = value.isNextNode;
 
     if (value?.relationCaseID && value?.relationCaseID != '') {
@@ -89,7 +102,7 @@ export class AddRecordCaseComponent implements OnInit {
       })
     }
   }
-  get data(){
+  get data() {
     return this._data
   }
 
@@ -106,10 +119,13 @@ export class AddRecordCaseComponent implements OnInit {
         tableName: TableName.TRADE_RECORD
       }
       console.log('relation other case', data, res)
-      this.store.dispatch(action_relationRecord({ data: data}))
+      this.store.dispatch(action_relationRecord({ data: data }))
     });
 
-    this.store.select(selector_isCreateUser).pipe(take(1)).subscribe(res => this.isCreateUser = res)
+    this.store.select(selector_isCreateUser).pipe(take(1)).subscribe(res => this.isCreateUser = res);
+
+    this.store.select(selector_selectedLawcaseId).pipe(take(1)).subscribe(res => this.caseID = res);
+    this.store.select(selector_user).pipe(take(1)).subscribe(res => this.userID = res.id);
   }
 
   /**
@@ -126,8 +142,37 @@ export class AddRecordCaseComponent implements OnInit {
           tableName: TableName.TRADE_RECORD
         }
         console.log('relation current case', data)
-        this.store.dispatch(action_relationRecord({ data: data}));
+        this.store.dispatch(action_relationRecord({ data: data }));
       })
+  }
+
+  onSetStartAccount() {
+    const tradeTime = moment(this.data.tradeTime).clone().subtract(1, 'm').format('YYYY-MM-DD HH:mm:ss')
+    const data: SqlData<StartNode> = {
+      tableData: {
+        account: this.getAccount(this.data),
+        accountName: this.data.oppositeName,
+        tradeTime: tradeTime,
+        money: this.data.money,
+        caseID: this.caseID,
+        userID: this.userID
+      },
+      tableName: TableName.START_ACCOUNT
+    }
+
+    this.sql.exec(PhpFunctionName.INSERT, data).subscribe(res => {
+      if (res?.length > 0) {
+        this.store.dispatch(action_insertStartNodeSuccess({ data: res[0] }))
+        toastr.success('设置成功')
+      } else {
+        toastr.success('设置失败')
+      }
+      this.parentDialogRef.close();
+    })
+  }
+
+  private getAccount(tradeRecord: TradeRecord) {
+    return tradeRecord.oppositeBankNumber ? tradeRecord.oppositeBankNumber : tradeRecord.oppositeAccount
   }
 
   onDelRelation() {
@@ -138,7 +183,7 @@ export class AddRecordCaseComponent implements OnInit {
       },
       tableName: TableName.TRADE_RECORD
     }
-    this.store.dispatch(action_relationRecord({ data: data}));
+    this.store.dispatch(action_relationRecord({ data: data }));
   }
 
   onMarkMoney(type: number) {
@@ -165,7 +210,7 @@ export class AddRecordCaseComponent implements OnInit {
   //   this.store.dispatch(action_relationRecord({ data: data}));
   // }
 
-  onSetNextNode(value:number|null){
+  onSetNextNode(value: number | null) {
     this.isNextNode = value;
     const data: SqlData<TradeRecord> = {
       id: this.recordId,
@@ -174,10 +219,19 @@ export class AddRecordCaseComponent implements OnInit {
       },
       tableName: TableName.TRADE_RECORD
     }
-    this.store.dispatch(action_relationRecord({ data: data}));
+    this.store.dispatch(action_relationRecord({ data: data }));
 
-    toastr.info('更改下级节点后，要点击刷新图表')
+    this.sql.exec(PhpFunctionName.UPDATE,data).subscribe(res=>{
+      if(res){
+        this.store.dispatch(action_relationRecordSuccess({data:{id:this.recordId,changes:{isNextNode:value}}}));
+        this.store.dispatch(action_refreshNodes())
+      }
+    })
+
+    // toastr.info('更改下级节点后，要点击刷新图表')
   }
+
+
 
   ngOnDestroy() {
     console.log('relation record destroy');
